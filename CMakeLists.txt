@@ -47,24 +47,24 @@ set_directory_properties(PROPERTIES
 )
 
 foreach(file_path ${SHADER_SRCS})
-  string(REGEX MATCH "([^/]+)$" name "${file_path}")
-  
-  set(header_name ${name})
-  string(APPEND header_name ".h")
+  string(REGEX MATCH "([^/]+)$" file_name "${file_path}")
 
-  string(REGEX REPLACE "\\." "_" identifier "${name}")
-  set(parsed_src "const char *${identifier} = \n")
+  set(header_name ${file_name})
+  string(APPEND header_name ".hpp")
 
-  file(STRINGS ${file_path} lines)
+  string(TOUPPER "${header_name}" guard)
+  string(REGEX REPLACE "\\." "_" guard "${guard}")
 
-  foreach(line ${lines})
-    string(CONFIGURE "${line}" line)
-    string(REGEX REPLACE "^(.+)$" "  \"\\1\\\\n\"\n" line "${line}")
-    string(APPEND parsed_src "${line}")
-  endforeach()
+  string(REGEX REPLACE "\\." "_" identifier "${file_name}")
 
-  string(REGEX REPLACE "\n$" ";\n" parsed_src "${parsed_src}")
-  file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/shaders/${header_name} "${parsed_src}")
+  set(parsed "#ifndef ${guard}\n#define ${guard}\n\nstatic const std::string ${identifier} = \nR\"(")
+
+  file(READ ${file_path} contents)
+
+  string(APPEND parsed "${contents})\";\n\n#endif\n")
+  string(CONFIGURE "${parsed}" parsed)
+
+  file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/shaders/${header_name} "${parsed}")
 endforeach()
 
 target_include_directories(${EXE_NAME} PRIVATE "${CMAKE_CURRENT_BINARY_DIR}")
