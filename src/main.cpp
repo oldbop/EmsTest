@@ -1,5 +1,7 @@
 #include "shader_program.hpp"
 
+#include "util/file_handling.hpp"
+
 #include <cmath>
 #include <cstdint>
 #include <cstdlib>
@@ -24,64 +26,6 @@
 
 #ifdef EMSCRIPTEN
 #include <emscripten.h>
-
-std::string vert = 
-R"(#version 300 es
-
-layout(location = 0) in vec3 aPos;
-layout(location = 1) in vec3 aCol;
-
-uniform mat4 Rot;
-
-out vec3 fCol;
-
-void main() {
-  gl_Position = Rot * vec4(aPos, 1.0);
-  fCol = aCol;
-}
-)";
-
-std::string frag = 
-R"(#version 300 es
-
-precision highp float;
-
-in vec3 fCol;
-out vec4 rCol;
-
-void main() {
-  rCol = vec4(fCol, 1.0);
-}
-)";
-
-#else
-
-std::string vert = 
-R"(#version 330 core
-
-layout(location = 0) in vec3 aPos;
-layout(location = 1) in vec3 aCol;
-
-uniform mat4 Rot;
-
-out vec3 fCol;
-
-void main() {
-  gl_Position = Rot * vec4(aPos, 1.0);
-  fCol = aCol;
-}
-)";
-
-std::string frag = 
-R"(#version 330 core
-
-in vec3 fCol;
-out vec4 rCol;
-
-void main() {
-  rCol = vec4(fCol, 1.0);
-}
-)";
 
 #endif
 
@@ -320,6 +264,9 @@ int main(int argc, char **argv) {
   glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *) (3 * sizeof(float)));
   glEnableVertexAttribArray(1);
 
+  std::string vert = load_file("res/shaders/square.vert");
+  std::string frag = load_file("res/shaders/square.frag");
+
   ShaderProgram prog;
 
   prog.CompileShader(GL_VERTEX_SHADER, vert);
@@ -330,7 +277,7 @@ int main(int argc, char **argv) {
 #ifdef EMSCRIPTEN
   emscripten_set_main_loop_arg(render, &prog, 60, true);
 #else
-  while (true) {
+  while (!glfwWindowShouldClose(rdr.win)) {
     render(&prog);
   }
 #endif
