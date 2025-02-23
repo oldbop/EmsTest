@@ -12,7 +12,7 @@ if(EMSCRIPTEN)
   set(EXE_NAME index)
   set(GLSL_VERSION "300 es")
 
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/res/index.html
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/html/index.html
     ${CMAKE_CURRENT_BINARY_DIR}
   )
 
@@ -30,44 +30,23 @@ else()
   add_subdirectory(deps/glfw/)
 endif()
 
-set(SRCS
+set(SOURCES
   src/square.cpp
   src/ShaderProgram.cpp
 )
 
-set(SHADER_SRCS
+set(SHADERS
   res/shaders/square.vert
   res/shaders/square.frag
 )
 
-add_executable(${EXE_NAME} ${SRCS})
+add_executable(${EXE_NAME} ${SOURCES})
 
-set_directory_properties(PROPERTIES
-  CMAKE_CONFIGURE_DEPENDS "${SHADER_SRCS}"
-)
-
-foreach(file_path ${SHADER_SRCS})
-  string(REGEX MATCH "([^/]+)$" file_name "${file_path}")
-
-  set(header_name ${file_name})
-  string(APPEND header_name ".hpp")
-
-  string(TOUPPER "${header_name}" guard)
-  string(REGEX REPLACE "\\." "_" guard "${guard}")
-
-  string(REGEX REPLACE "\\." "_" identifier "${file_name}")
-
-  set(parsed "#ifndef ${guard}\n#define ${guard}\n\nstatic const std::string ${identifier} = \nR\"(")
-
-  file(READ ${file_path} contents)
-
-  string(APPEND parsed "${contents})\";\n\n#endif\n")
-  string(CONFIGURE "${parsed}" parsed)
-
-  file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/shaders/${header_name} "${parsed}")
+foreach(file_path ${SHADERS})
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${file_path}
+    ${CMAKE_CURRENT_BINARY_DIR}/${file_path}
+  )
 endforeach()
-
-target_include_directories(${EXE_NAME} PRIVATE "${CMAKE_CURRENT_BINARY_DIR}")
 
 if(EMSCRIPTEN)
   execute_process(COMMAND emcc --cflags
@@ -78,7 +57,7 @@ if(EMSCRIPTEN)
   set_target_properties(${EXE_NAME} PROPERTIES
     DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX}
     COMPILE_FLAGS ${EM_CFLAGS}
-    LINK_FLAGS "-sUSE_GLFW=3 -sMIN_WEBGL_VERSION=2 -sMAX_WEBGL_VERSION=2"
+    LINK_FLAGS "--embed-file res/ -sUSE_GLFW=3 -sMIN_WEBGL_VERSION=2 -sMAX_WEBGL_VERSION=2"
     # CMAKE_EXECUTABLE_SUFFIX ".html"
   )
 

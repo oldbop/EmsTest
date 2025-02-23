@@ -1,8 +1,5 @@
 #include "ShaderProgram.hpp"
 
-#include "shaders/square.vert.h"
-#include "shaders/square.frag.h"
-
 #include <cmath>
 #include <cstdint>
 #include <cstdlib>
@@ -325,8 +322,8 @@ int main(int argc, char **argv) {
 
   ShaderProgram prog;
 
-  prog.CompileShader(GL_VERTEX_SHADER, square_vert);
-  prog.CompileShader(GL_FRAGMENT_SHADER, square_frag);
+  prog.CompileShader(GL_VERTEX_SHADER, vert);
+  prog.CompileShader(GL_FRAGMENT_SHADER, frag);
   prog.CreateProgram();
   prog.Use();
 
