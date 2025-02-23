@@ -31,8 +31,9 @@ else()
 endif()
 
 set(SOURCES
-  src/square.cpp
-  src/ShaderProgram.cpp
+  src/main.cpp
+  src/shader_program.cpp
+  src/util/file_handling.cpp
 )
 
 set(SHADERS

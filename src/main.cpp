@@ -1,4 +1,4 @@
-#include "ShaderProgram.hpp"
+#include "shader_program.hpp"
 
 #include <cmath>
 #include <cstdint>
