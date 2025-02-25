@@ -43,11 +43,21 @@ set(SHADERS
 
 add_executable(${EXE_NAME} ${SOURCES})
 
+set(abs_shaders "")
+
 foreach(file_path ${SHADERS})
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${file_path}
     ${CMAKE_CURRENT_BINARY_DIR}/${file_path}
   )
+
+  list(APPEND abs_shaders ${CMAKE_CURRENT_BINARY_DIR}/${file_path})
 endforeach()
+
+list(GET SOURCES 0 first_src)
+
+set_source_files_properties(${first_src} PROPERTIES
+  OBJECT_DEPENDS "${abs_shaders}"
+)
 
 if(EMSCRIPTEN)
   execute_process(COMMAND emcc --cflags
