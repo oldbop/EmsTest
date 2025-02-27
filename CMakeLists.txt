@@ -30,6 +30,8 @@ else()
   add_subdirectory(deps/glfw/)
 endif()
 
+add_subdirectory(deps/slim/)
+
 set(SOURCES
   src/main.cpp
   src/shader_program.cpp
@@ -58,6 +60,8 @@ list(GET SOURCES 0 first_src)
 set_source_files_properties(${first_src} PROPERTIES
   OBJECT_DEPENDS "${abs_shaders}"
 )
+
+target_link_libraries(${EXE_NAME} PRIVATE slim)
 
 if(EMSCRIPTEN)
   execute_process(COMMAND emcc --cflags

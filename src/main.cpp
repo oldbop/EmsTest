@@ -1,14 +1,11 @@
 #include "shader_program.hpp"
-
 #include "util/file_handling.hpp"
 
-#include <cmath>
 #include <cstdint>
-#include <cstdlib>
-#include <cstring>
-#include <ctime>
 #include <iostream>
 #include <string>
+
+#include <slim/slim.h>
 
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
@@ -29,13 +26,6 @@
 
 #endif
 
-#define PI  3.141592653589793f
-
-typedef float vec2[2];
-typedef float vec3[3];
-typedef float vec4[4];
-typedef float mat4[16];
-
 struct Renderer {
   std::string title;
   uint32_t width, height;
@@ -43,122 +33,6 @@ struct Renderer {
 };
 
 static Renderer rdr = { "Rotating square", 700, 700 };
-
-/* Maybe unnecessary */
-void identity4(float *m) {
-
-  for (uint32_t i = 0; i < 16; ++i) {
-    if ((i % 5) == 0) {
-      m[i] = 1.0f;
-    } else {
-      m[i] = 0.0f;
-    }
-  }
-}
-
-void print4(float *m) {
-
-  for (uint32_t i = 0; i < 16; ++i) {
-
-    std::cout << m[i] << " ";
-
-    if ((i + 1) % 4 == 0) {
-      std::cout << "\n";
-    }
-  }
-
-  std::cout << std::endl;
-}
-
-void tsp4(float *m) {
-
-  mat4 wm;
-  memcpy(wm, m, 16 * sizeof(float));
-
-  for (uint32_t i = 0; i < 4; ++i) {
-    for (uint32_t j = 0; j < 4; ++j) {
-      m[(4 * i) + j] = wm[i + (4 * j)];
-    }
-  }
-}
-
-void add4(float *m1, float *m2) {
-
-  mat4 wm1;
-  memcpy(wm1, m1, 16 * sizeof(float));
-
-  for (uint32_t i = 0; i < 16; ++i) {
-    m1[i] = wm1[i] + m2[i];
-  }
-}
-
-void sub4(float *m1, float *m2) {
-
-  mat4 wm1;
-  memcpy(wm1, m1, 16 * sizeof(float));
-
-  for (uint32_t i = 0; i < 16; ++i) {
-    m1[i] = wm1[i] - m2[i];
-  }
-}
-
-void mul4(float *m1, float *m2) {
-
-  mat4 wm1;
-
-  memcpy(wm1, m1, 16 * sizeof(float));
-  memset(m1,   0, 16 * sizeof(float));
-
-  for (uint32_t i = 0; i < 4; ++i) {
-    for (uint32_t j = 0; j < 4; ++j) {
-      for (uint32_t k = 0; k < 4; ++k) {
-        m1[(4 * i) + j] += wm1[(4 * i) + k] * m2[j + (4 * k)];
-      }
-    }
-  }
-}
-
-void rotateX(float *m, float r) {
-
-  float sin_r = sin(r), cos_r = cos(r);
-
-  mat4 result = {
-      1.0f,   0.0f,   0.0f,   0.0f,
-      0.0f,  cos_r, -sin_r,   0.0f,
-      0.0f,  sin_r,  cos_r,   0.0f,
-      0.0f,   0.0f,   0.0f,   1.0f
-  };
-
-  memcpy(m, result, 16 * sizeof(float));
-}
-
-void rotateY(float *m, float r) {
-
-  float sin_r = sin(r), cos_r = cos(r);
-
-  mat4 result = {
-     cos_r,   0.0f,  sin_r,   0.0f,
-      0.0f,   1.0f,   0.0f,   0.0f,
-    -sin_r,   0.0f,  cos_r,   0.0f,
-      0.0f,   0.0f,   0.0f,   1.0f
-  };
-
-  memcpy(m, result, 16 * sizeof(float));
-}
-
-void rotateZ(float *m, float r) {
-
-  float sin_r = sin(r), cos_r = cos(r);
-
-  mat4 result = {
-     cos_r, -sin_r,   0.0f,   0.0f,
-     sin_r,  cos_r,   0.0f,   0.0f,
-      0.0f,   0.0f,   1.0f,   0.0f,
-      0.0f,   0.0f,   0.0f,   1.0f
-  };
-
-  memcpy(m, result, 16 * sizeof(float));
-}
 
 void render(void *shader_program) {
 
@@ -169,14 +43,14 @@ void render(void *shader_program) {
 
   mat4 rotX, rotY, rotZ;
 
-  //rotateX(rotX, time * PI * 0.2f);
-  rotateY(rotY, time * PI * 1.2f);
-  rotateZ(rotZ, time * PI / 4.0f);
+  //mat4_rotX(rotX, time * PI * 0.2f);
+  mat4_rotY(rotY, time * PI * 1.2f);
+  mat4_rotZ(rotZ, time * PI / 4.0f);
 
-  mul4(rotY, rotZ);
-  //mul4(rotX, rotY);
+  mat4_mul(rotY, rotZ);
+  //mat4_mul(rotX, rotY);
 
-  tsp4(rotY);
+  mat4_tsp(rotY);
   
   ((ShaderProgram *) shader_program)->SetMat4("Rot", rotY);
 
