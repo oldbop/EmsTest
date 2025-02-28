@@ -7,7 +7,6 @@
 
 class ShaderProgram {
 public:
-  virtual ~ShaderProgram();
   void CompileShader(uint32_t type, const std::string &src);
   void CreateProgram();
   uint32_t GetID() const { return m_ID; }

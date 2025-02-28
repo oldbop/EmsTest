@@ -14,10 +14,6 @@
 
 #endif
 
-ShaderProgram::~ShaderProgram() {
-  glDeleteProgram(m_ID);
-}
-
 void ShaderProgram::CompileShader(uint32_t type, const std::string &src) {
 
   const char *c_style = src.c_str();
