@@ -55,13 +55,9 @@ foreach(file_path ${SHADERS})
   list(APPEND abs_shaders ${CMAKE_CURRENT_BINARY_DIR}/${file_path})
 endforeach()
 
-list(GET SOURCES 0 first_src)
-
-set_source_files_properties(${first_src} PROPERTIES
-  OBJECT_DEPENDS "${abs_shaders}"
+set_target_properties(${EXE_NAME} PROPERTIES
+  LINK_DEPENDS "${abs_shaders}"
 )
-
-target_link_libraries(${EXE_NAME} PRIVATE slim)
 
 if(EMSCRIPTEN)
   execute_process(COMMAND emcc --cflags
@@ -99,3 +95,5 @@ else()
 
   target_link_libraries(${EXE_NAME} PRIVATE glfw)
 endif()
+
+target_link_libraries(${EXE_NAME} PRIVATE slim)
