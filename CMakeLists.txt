@@ -38,26 +38,28 @@ set(SOURCES
   src/util/file_handling.cpp
 )
 
-set(SHADERS
+set(RESOURCES
   res/shaders/square.vert
   res/shaders/square.frag
 )
 
-add_executable(${EXE_NAME} ${SOURCES})
+set(abs_paths "")
 
-set(abs_shaders "")
+foreach(file_path ${RESOURCES})
+  if(file_path MATCHES ".+\.vert$" OR file_path MATCHES ".+\.frag$")
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${file_path}
+      ${CMAKE_CURRENT_BINARY_DIR}/${file_path}
+    )
+  else()
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${file_path}
+      ${CMAKE_CURRENT_BINARY_DIR}/${file_path} COPYONLY
+    )
+  endif()
 
-foreach(file_path ${SHADERS})
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${file_path}
-    ${CMAKE_CURRENT_BINARY_DIR}/${file_path}
-  )
-
-  list(APPEND abs_shaders ${CMAKE_CURRENT_BINARY_DIR}/${file_path})
+  list(APPEND abs_paths ${CMAKE_CURRENT_BINARY_DIR}/${file_path})
 endforeach()
 
-set_target_properties(${EXE_NAME} PROPERTIES
-  LINK_DEPENDS "${abs_shaders}"
-)
+add_executable(${EXE_NAME} ${SOURCES})
 
 if(EMSCRIPTEN)
   execute_process(COMMAND emcc --cflags
@@ -69,7 +71,7 @@ if(EMSCRIPTEN)
     DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX}
     COMPILE_FLAGS ${EM_CFLAGS}
     LINK_FLAGS "--embed-file res/ -sUSE_GLFW=3 -sMIN_WEBGL_VERSION=2 -sMAX_WEBGL_VERSION=2"
-    # CMAKE_EXECUTABLE_SUFFIX ".html"
+    LINK_DEPENDS "${abs_paths}"
   )
 
   target_compile_definitions(${EXE_NAME}
