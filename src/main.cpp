@@ -43,18 +43,19 @@ void render(void *shader_program) {
 
   mat4 rotX, rotY, rotZ;
 
-  //mat4_rotX(rotX, time * PI * 0.2f);
-  mat4_rotY(rotY, time * PI * 1.2f);
-  mat4_rotZ(rotZ, time * PI / 4.0f);
+  mat4_rotX(rotX, time * PI * 0.25f);
+  mat4_rotY(rotY, time * PI * 0.50f);
+  mat4_rotZ(rotZ, PI / 4.0f);
 
   mat4_mul(rotY, rotZ);
-  //mat4_mul(rotX, rotY);
+  mat4_mul(rotX, rotY);
 
-  mat4_tsp(rotY);
+  mat4_tsp(rotX);
   
-  ((ShaderProgram *) shader_program)->SetMat4("Rot", rotY);
+  // Consider using std::static_cast instead of C style
+  ((ShaderProgram *) shader_program)->SetMat4("Rot", rotX);
 
-  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void *) 0);
+  glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (void *) 0);
 
   glfwSwapBuffers(rdr.win);
   glfwPollEvents();
@@ -95,28 +96,45 @@ int main(int argc, char **argv) {
   };
 
   auto key_cb = [](GLFWwindow *win, int32_t key, int32_t scan, int32_t act, int32_t mods) -> void {
-    if (key == GLFW_KEY_ESCAPE && act == GLFW_PRESS)
+
+    if (key == GLFW_KEY_ESCAPE && act == GLFW_PRESS) {
       glfwSetWindowShouldClose(win, 1);
+    }
+    if (key == GLFW_KEY_SPACE && act == GLFW_PRESS) {
+      std::cout << "Space pressed!!" << std::endl;
+    }
   };
 
   glfwSetFramebufferSizeCallback(rdr.win, resize_cb);
   glfwSetKeyCallback(rdr.win, key_cb);
 
   glEnable(GL_DEPTH_TEST);
-  //glEnable(GL_CULL_FACE);
+  glEnable(GL_CULL_FACE);
   //glLineWidth(8.0f);
   //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   glViewport(0, 0, rdr.width, rdr.height);
 
   float vertices[] = {
-    /*   Positions   */   /*   Colours   */
-    -0.5f, -0.5f, 0.0f,   1.0f, 0.0f, 0.0f,
-    -0.5f,  0.5f, 0.0f,   0.0f, 1.0f, 0.0f,
-     0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,
-     0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f
+    /*   Positions   */
+    -0.5f, -0.5f,  0.5f,
+    -0.5f,  0.5f,  0.5f,
+     0.5f, -0.5f,  0.5f,
+     0.5f,  0.5f,  0.5f,
+
+    -0.5f, -0.5f, -0.5f,
+    -0.5f,  0.5f, -0.5f,
+     0.5f, -0.5f, -0.5f,
+     0.5f,  0.5f, -0.5f
   };
 
-  uint32_t indices[] = { 0, 2, 3, 3, 1, 0 };
+  uint32_t indices[] = {
+    0, 2, 3, 3, 1, 0,
+    4, 0, 1, 1, 5, 4,
+    6, 4, 5, 5, 7, 6,
+    2, 6, 7, 7, 3, 2,
+    1, 3, 7, 7, 5, 1,
+    4, 6, 2, 2, 0, 4
+  };
 
   uint32_t vao;
   glGenVertexArrays(1, &vao);
@@ -132,11 +150,11 @@ int main(int argc, char **argv) {
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *) 0);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *) 0);
   glEnableVertexAttribArray(0);
 
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *) (3 * sizeof(float)));
-  glEnableVertexAttribArray(1);
+  //glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *) (3 * sizeof(float)));
+  //glEnableVertexAttribArray(1);
 
   std::string vert = load_file("res/shaders/square.vert");
   std::string frag = load_file("res/shaders/square.frag");

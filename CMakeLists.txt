@@ -67,10 +67,16 @@ if(EMSCRIPTEN)
     OUTPUT_STRIP_TRAILING_WHITESPACE
   )
 
+  set(EM_LFLAGS "--embed-file res/ -sUSE_GLFW=3 "
+                "-sMIN_WEBGL_VERSION=2 -sMAX_WEBGL_VERSION=2"
+  )
+
+  string(REPLACE ";" "" EM_LFLAGS "${EM_LFLAGS}")
+
   set_target_properties(${EXE_NAME} PROPERTIES
     DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX}
     COMPILE_FLAGS ${EM_CFLAGS}
-    LINK_FLAGS "--embed-file res/ -sUSE_GLFW=3 -sMIN_WEBGL_VERSION=2 -sMAX_WEBGL_VERSION=2"
+    LINK_FLAGS ${EM_LFLAGS}
     LINK_DEPENDS "${abs_paths}"
   )
 
