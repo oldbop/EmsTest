@@ -79,6 +79,30 @@ void mat4_mul(float *m1, float *m2) {
   }
 }
 
+void mat4_scl(float *m, float *v) {
+
+  mat4 result = {
+      v[0],   0.0f,   0.0f,   0.0f,
+      0.0f,   v[1],   0.0f,   0.0f,
+      0.0f,   0.0f,   v[2],   0.0f,
+      0.0f,   0.0f,   0.0f,   1.0f
+  };
+
+  memcpy(m, result, 16 * sizeof(float));
+}
+
+void mat4_tst(float *m, float *v) {
+
+  mat4 result = {
+      1.0f,   0.0f,   0.0f,   v[0],
+      0.0f,   1.0f,   0.0f,   v[1],
+      0.0f,   0.0f,   1.0f,   v[2],
+      0.0f,   0.0f,   0.0f,   1.0f
+  };
+
+  memcpy(m, result, 16 * sizeof(float));
+}
+
 void mat4_rotX(float *m, float r) {
 
   float sin_r = sin(r), cos_r = cos(r);

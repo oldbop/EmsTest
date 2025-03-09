@@ -13,6 +13,8 @@ void mat4_tsp(float *m);
 void mat4_add(float *m1, float *m2);
 void mat4_sub(float *m1, float *m2);
 void mat4_mul(float *m1, float *m2);
+void mat4_scl(float *m, float *v);
+void mat4_tst(float *m, float *v);
 void mat4_rotX(float *m, float r);
 void mat4_rotY(float *m, float r);
 void mat4_rotZ(float *m, float r);
