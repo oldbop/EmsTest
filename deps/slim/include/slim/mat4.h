@@ -7,8 +7,8 @@
 extern "C" {
 #endif
 
-void mat4_idety(float *m);
 void mat4_print(float *m);
+void mat4_idy(float *m);
 void mat4_tsp(float *m);
 void mat4_add(float *m1, float *m2);
 void mat4_sub(float *m1, float *m2);

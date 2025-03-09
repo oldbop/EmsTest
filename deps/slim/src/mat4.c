@@ -5,18 +5,6 @@
 #include <stdio.h>
 #include <string.h>
 
-void mat4_idety(float *m) {
-
-  mat4 result = {
-      1.0f,   0.0f,   0.0f,   0.0f,
-      0.0f,   1.0f,   0.0f,   0.0f,
-      0.0f,   0.0f,   1.0f,   0.0f,
-      0.0f,   0.0f,   0.0f,   1.0f
-  };
-
-  memcpy(m, result, 16 * sizeof(float));
-}
-
 void mat4_print(float *m) {
 
   for (uint32_t i = 0; i < 16; ++i) {
@@ -29,6 +17,18 @@ void mat4_print(float *m) {
   }
 
   printf("\n");
+}
+
+void mat4_idy(float *m) {
+
+  mat4 result = {
+      1.0f,   0.0f,   0.0f,   0.0f,
+      0.0f,   1.0f,   0.0f,   0.0f,
+      0.0f,   0.0f,   1.0f,   0.0f,
+      0.0f,   0.0f,   0.0f,   1.0f
+  };
+
+  memcpy(m, result, 16 * sizeof(float));
 }
 
 void mat4_tsp(float *m) {
