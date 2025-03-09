@@ -7,13 +7,14 @@
 
 void mat4_idety(float *m) {
 
-  for (uint32_t i = 0; i < 16; ++i) {
-    if ((i % 5) == 0) {
-      m[i] = 1.0f;
-    } else {
-      m[i] = 0.0f;
-    }
-  }
+  mat4 result = {
+      1.0f,   0.0f,   0.0f,   0.0f,
+      0.0f,   1.0f,   0.0f,   0.0f,
+      0.0f,   0.0f,   1.0f,   0.0f,
+      0.0f,   0.0f,   0.0f,   1.0f
+  };
+
+  memcpy(m, result, 16 * sizeof(float));
 }
 
 void mat4_print(float *m) {

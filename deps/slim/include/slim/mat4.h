@@ -1,11 +1,11 @@
 #ifndef SLIM_MAT4_H
 #define SLIM_MAT4_H
 
+#include "types.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-typedef float mat4[16];
 
 void mat4_idety(float *m);
 void mat4_print(float *m);
