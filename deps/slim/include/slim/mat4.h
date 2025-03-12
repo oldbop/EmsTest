@@ -7,17 +7,17 @@
 extern "C" {
 #endif
 
-void mat4_print(float *m);
-void mat4_idy(float *m);
-void mat4_tsp(float *m);
-void mat4_add(float *m1, float *m2);
-void mat4_sub(float *m1, float *m2);
-void mat4_mul(float *m1, float *m2);
-void mat4_scl(float *m, float *v);
-void mat4_tst(float *m, float *v);
-void mat4_rotX(float *m, float r);
-void mat4_rotY(float *m, float r);
-void mat4_rotZ(float *m, float r);
+void mat4_print(const mat4 *m);
+mat4 mat4_idy(void);
+mat4 mat4_tsp(const mat4 *m);
+mat4 mat4_add(const mat4 *m1, const mat4 *m2);
+mat4 mat4_sub(const mat4 *m1, const mat4 *m2);
+mat4 mat4_mul(const mat4 *m1, const mat4 *m2);
+mat4 mat4_scl(const vec3 *v);
+mat4 mat4_tst(const vec3 *v);
+mat4 mat4_rotX(float r);
+mat4 mat4_rotY(float r);
+mat4 mat4_rotZ(float r);
 
 #ifdef __cplusplus
 }

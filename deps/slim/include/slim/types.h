@@ -3,8 +3,8 @@
 
 #define PI  3.141592653589793f
 
-typedef float vec3[3];
-typedef float vec4[4];
-typedef float mat4[16];
+typedef struct { float v[3]; } vec3;
+typedef struct { float v[4]; } vec4;
+typedef struct { float v[16]; } mat4;
 
 #endif
