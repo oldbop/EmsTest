@@ -21,12 +21,12 @@ void mat4_print(const mat4 *m) {
 
 mat4 mat4_idy(void) {
 
-  mat4 res = {{
+  mat4 res = {
         1.0f,     0.0f,     0.0f,     0.0f,
         0.0f,     1.0f,     0.0f,     0.0f,
         0.0f,     0.0f,     1.0f,     0.0f,
         0.0f,     0.0f,     0.0f,     1.0f
-  }};
+  };
 
   return res;
 }
@@ -85,24 +85,24 @@ mat4 mat4_mul(const mat4 *m1, const mat4 *m2) {
 
 mat4 mat4_scl(const vec3 *v) {
 
-  mat4 res = {{
+  mat4 res = {
      v->v[0],     0.0f,     0.0f,     0.0f,
         0.0f,  v->v[1],     0.0f,     0.0f,
         0.0f,     0.0f,  v->v[2],     0.0f,
         0.0f,     0.0f,     0.0f,     1.0f
-  }};
+  };
 
   return res;
 }
 
 mat4 mat4_tst(const vec3 *v) {
 
-  mat4 res = {{
+  mat4 res = {
         1.0f,     0.0f,     0.0f,  v->v[0],
         0.0f,     1.0f,     0.0f,  v->v[1],
         0.0f,     0.0f,     1.0f,  v->v[2],
         0.0f,     0.0f,     0.0f,     1.0f
-  }};
+  };
 
   return res;
 }
@@ -111,12 +111,12 @@ mat4 mat4_rotX(float r) {
 
   float sin_r = sinf(r), cos_r = cosf(r);
 
-  mat4 res = {{
+  mat4 res = {
         1.0f,     0.0f,     0.0f,     0.0f,
         0.0f,    cos_r,   -sin_r,     0.0f,
         0.0f,    sin_r,    cos_r,     0.0f,
         0.0f,     0.0f,     0.0f,     1.0f
-  }};
+  };
 
   return res;
 }
@@ -125,12 +125,12 @@ mat4 mat4_rotY(float r) {
 
   float sin_r = sinf(r), cos_r = cosf(r);
 
-  mat4 res = {{
+  mat4 res = {
        cos_r,     0.0f,    sin_r,     0.0f,
         0.0f,     1.0f,     0.0f,     0.0f,
       -sin_r,     0.0f,    cos_r,     0.0f,
         0.0f,     0.0f,     0.0f,     1.0f
-  }};
+  };
 
   return res;
 }
@@ -139,12 +139,12 @@ mat4 mat4_rotZ(float r) {
 
   float sin_r = sinf(r), cos_r = cosf(r);
 
-  mat4 res = {{
+  mat4 res = {
        cos_r,   -sin_r,     0.0f,     0.0f,
        sin_r,    cos_r,     0.0f,     0.0f,
         0.0f,     0.0f,     1.0f,     0.0f,
         0.0f,     0.0f,     0.0f,     1.0f
-  }};
+  };
 
   return res;
 }

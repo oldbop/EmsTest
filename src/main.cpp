@@ -34,7 +34,7 @@ struct Renderer {
   GLFWwindow *win;
 };
 
-static Renderer rdr = { "Rotating square", 700, 700 };
+Renderer rdr = { "Rotating square", 700, 700 };
 
 void render(void *shader_program) {
 
@@ -50,10 +50,10 @@ void render(void *shader_program) {
   mat4 rot   = mat4_mul(&rotX,  &rotY);
   rot        = mat4_mul(&rot, &rotZ);
 
-  vec3 sclv  = {{ 0.2f, 0.2f, 0.2f }};
+  vec3 sclv  = { 0.2f, 0.2f, 0.2f };
   mat4 scl   = mat4_scl(&sclv);
 
-  vec3 tstv  = {{ 0.5f * cosf(time * PI), 0.5f * sinf(time * PI), 0.0f }};
+  vec3 tstv  = { 0.5f * cosf(time * PI), 0.5f * sinf(time * PI), 0.0f };
   mat4 tst   = mat4_tst(&tstv);
 
   mat4 model = mat4_mul(&tst, &rot);
