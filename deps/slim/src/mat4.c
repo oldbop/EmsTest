@@ -109,7 +109,7 @@ mat4 mat4_tst(const vec3 *v) {
 
 mat4 mat4_rotX(float r) {
 
-  float sin_r = sin(r), cos_r = cos(r);
+  float sin_r = sinf(r), cos_r = cosf(r);
 
   mat4 res = {{
         1.0f,     0.0f,     0.0f,     0.0f,
@@ -123,7 +123,7 @@ mat4 mat4_rotX(float r) {
 
 mat4 mat4_rotY(float r) {
 
-  float sin_r = sin(r), cos_r = cos(r);
+  float sin_r = sinf(r), cos_r = cosf(r);
 
   mat4 res = {{
        cos_r,     0.0f,    sin_r,     0.0f,
@@ -137,7 +137,7 @@ mat4 mat4_rotY(float r) {
 
 mat4 mat4_rotZ(float r) {
 
-  float sin_r = sin(r), cos_r = cos(r);
+  float sin_r = sinf(r), cos_r = cosf(r);
 
   mat4 res = {{
        cos_r,   -sin_r,     0.0f,     0.0f,
