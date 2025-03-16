@@ -168,6 +168,12 @@ int main(int argc, char **argv) {
   std::string vert = load_file("res/shaders/square.vert");
   std::string frag = load_file("res/shaders/square.frag");
 
+  if (vert.empty() || frag.empty()) {
+    std::cout << "Failed to load resources" << std::endl;
+    glfwTerminate();
+    return 1;
+  }
+
   ShaderProgram prog;
 
   prog.CompileShader(GL_VERTEX_SHADER, vert);

@@ -8,7 +8,7 @@ std::string load_file(const char *path) {
   FILE *file = fopen(path, "rb");
 
   if (!file) {
-    return nullptr;
+    return std::string();
   }
 
   std::string data;
