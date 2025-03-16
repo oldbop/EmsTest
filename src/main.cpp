@@ -2,6 +2,7 @@
 
 #include "util/file_handling.hpp"
 
+#include <cmath>
 #include <cstdint>
 #include <iostream>
 #include <string>
@@ -42,17 +43,26 @@ void render(void *shader_program) {
   glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  mat4 rotX   = mat4_rotX(time * PI * 0.25f);
-  mat4 rotY   = mat4_rotY(time * PI * 0.50f);
-  mat4 rotZ   = mat4_rotZ(PI / 4.0f);
+  mat4 rotX  = mat4_rotX(time * PI * 0.25f);
+  mat4 rotY  = mat4_rotY(time * PI * 0.50f);
+  mat4 rotZ  = mat4_rotZ(PI / 4.0f);
 
-  mat4 rotXY  = mat4_mul(&rotX,  &rotY);
-  mat4 rotXYZ = mat4_mul(&rotXY, &rotZ);
+  mat4 rot   = mat4_mul(&rotX,  &rotY);
+  rot        = mat4_mul(&rot, &rotZ);
 
-  mat4 rot    = mat4_tsp(&rotXYZ);
-  
-  // Consider using std::static_cast instead of C style
-  ((ShaderProgram *) shader_program)->SetMat4("Rot", rot.v);
+  vec3 sclv  = {{ 0.2f, 0.2f, 0.2f }};
+  mat4 scl   = mat4_scl(&sclv);
+
+  vec3 tstv  = {{ 0.5f * cosf(time * PI), 0.5f * sinf(time * PI), 0.0f }};
+  mat4 tst   = mat4_tst(&tstv);
+
+  mat4 model = mat4_mul(&tst, &rot);
+  model      = mat4_mul(&model, &scl);
+  model      = mat4_tsp(&model);
+
+  // Consider using std::static_cast<> instead of C style
+  // Look into std::dynamic_cast<>
+  ((ShaderProgram *) shader_program)->SetMat4("Rot", model.v);
 
   glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (void *) 0);
 
