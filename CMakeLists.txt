@@ -61,6 +61,11 @@ endforeach()
 
 add_executable(${EXE_NAME} ${SOURCES})
 
+target_compile_options(${EXE_NAME} PRIVATE
+  $<$<COMPILE_LANG_AND_ID:C,Clang>:-std=c99;-Wall>
+  $<$<COMPILE_LANG_AND_ID:CXX,Clang>:-std=c++11;-Wall>
+)
+
 if(EMSCRIPTEN)
   execute_process(COMMAND emcc --cflags
     OUTPUT_VARIABLE EM_CFLAGS
@@ -87,11 +92,6 @@ if(EMSCRIPTEN)
 else()
   set_target_properties(${EXE_NAME} PROPERTIES
     DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX}
-  )
-
-  target_compile_options(${EXE_NAME} PRIVATE
-    $<$<COMPILE_LANG_AND_ID:C,Clang>:-std=c99;-Wall>
-    $<$<COMPILE_LANG_AND_ID:CXX,Clang>:-std=c++11;-Wall>
   )
 
   if(SYS_GL_HEADERS)
