@@ -3,17 +3,14 @@
 #include <math.h>
 #include <stdint.h>
 #include <stdio.h>
-#include <string.h>
 
 void mat4_print(const mat4 *m) {
 
-  for (uint32_t i = 0; i < 16; ++i) {
-
-    printf("%.1f ", m->v[i]);
-
-    if ((i + 1) % 4 == 0) {
-      printf("\n");
-    }
+  for (uint32_t i = 0; i < 4; ++i) {
+    printf("%.1f %.1f %.1f %.1f\n", m->v[(4 * i)],
+                                    m->v[(4 * i) + 1],
+                                    m->v[(4 * i) + 2],
+                                    m->v[(4 * i) + 3]);
   }
 
   printf("\n");
@@ -68,9 +65,7 @@ mat4 mat4_sub(const mat4 *m1, const mat4 *m2) {
 
 mat4 mat4_mul(const mat4 *m1, const mat4 *m2) {
 
-  mat4 res;
-
-  memset(res.v, 0, 16 * sizeof(float));
+  mat4 res = { 0 };
 
   for (uint32_t i = 0; i < 4; ++i) {
     for (uint32_t j = 0; j < 4; ++j) {
