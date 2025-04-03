@@ -7,14 +7,14 @@
 
 class ShaderProgram {
 public:
-  void CompileShader(uint32_t type, const std::string &src);
-  void CreateProgram();
-  uint32_t GetID() const { return m_ID; }
-  void SetBool(const std::string &name, bool value) const;
-  void SetFloat(const std::string &name, float value) const;
-  void SetInt(const std::string &name, int32_t value) const;
-  void SetMat4(const std::string &name, float *values) const;
-  void Use() const;
+  void compile_shader(uint32_t type, const std::string &src);
+  void create_program();
+  uint32_t get_ID() const { return m_ID; }
+  void set_bool(const std::string &name, bool value) const;
+  void set_float(const std::string &name, float value) const;
+  void set_int(const std::string &name, int32_t value) const;
+  void set_mat4(const std::string &name, float *values) const;
+  void use() const;
 private:
   uint32_t m_ID;
   std::vector<uint32_t> m_ShaderIDs;

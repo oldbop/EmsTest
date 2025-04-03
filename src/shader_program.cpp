@@ -14,7 +14,7 @@
 
 #endif
 
-void ShaderProgram::CompileShader(uint32_t type, const std::string &src) {
+void ShaderProgram::compile_shader(uint32_t type, const std::string &src) {
 
   const char *c_style = src.c_str();
   uint32_t shader_id  = glCreateShader(type);
@@ -43,7 +43,7 @@ void ShaderProgram::CompileShader(uint32_t type, const std::string &src) {
   m_ShaderIDs.push_back(shader_id);
 }
 
-void ShaderProgram::CreateProgram() {
+void ShaderProgram::create_program() {
 
   m_ID = glCreateProgram();
 
@@ -73,22 +73,22 @@ void ShaderProgram::CreateProgram() {
   }
 }
 
-void ShaderProgram::SetBool(const std::string &name, bool value) const {
+void ShaderProgram::set_bool(const std::string &name, bool value) const {
   glUniform1i(glGetUniformLocation(m_ID, name.c_str()), (int32_t) value);
 }
 
-void ShaderProgram::SetFloat(const std::string &name, float value) const {
+void ShaderProgram::set_float(const std::string &name, float value) const {
   glUniform1f(glGetUniformLocation(m_ID, name.c_str()), value);
 }
 
-void ShaderProgram::SetInt(const std::string &name, int32_t value) const {
+void ShaderProgram::set_int(const std::string &name, int32_t value) const {
   glUniform1i(glGetUniformLocation(m_ID, name.c_str()), value);
 }
 
-void ShaderProgram::SetMat4(const std::string &name, float *values) const {
+void ShaderProgram::set_mat4(const std::string &name, float *values) const {
   glUniformMatrix4fv(glGetUniformLocation(m_ID, name.c_str()), 1, GL_FALSE, values);
 }
 
-void ShaderProgram::Use() const {
+void ShaderProgram::use() const {
   glUseProgram(m_ID);
 }

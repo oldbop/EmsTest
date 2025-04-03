@@ -62,7 +62,7 @@ void render(void *shader_program) {
 
   // Consider using std::static_cast<> instead of C style
   // Look into std::dynamic_cast<>
-  ((ShaderProgram *) shader_program)->SetMat4("Rot", model.v);
+  ((ShaderProgram *) shader_program)->set_mat4("Rot", model.v);
 
   glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (void *) 0);
 
@@ -176,10 +176,10 @@ int main(int argc, char **argv) {
 
   ShaderProgram prog;
 
-  prog.CompileShader(GL_VERTEX_SHADER, vert);
-  prog.CompileShader(GL_FRAGMENT_SHADER, frag);
-  prog.CreateProgram();
-  prog.Use();
+  prog.compile_shader(GL_VERTEX_SHADER, vert);
+  prog.compile_shader(GL_FRAGMENT_SHADER, frag);
+  prog.create_program();
+  prog.use();
 
 #ifdef EMSCRIPTEN
   emscripten_set_main_loop_arg(render, &prog, 60, true);
