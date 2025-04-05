@@ -40,21 +40,21 @@ void ShaderProgram::compile_shader(uint32_t type, const std::string &src) {
     return;
   }
 
-  m_ShaderIDs.push_back(shader_id);
+  shader_ids_.push_back(shader_id);
 }
 
 void ShaderProgram::create_program() {
 
-  m_ID = glCreateProgram();
+  id_ = glCreateProgram();
 
-  for (const auto &shader_id : m_ShaderIDs) {
-    glAttachShader(m_ID, shader_id);
+  for (const auto &shader_id : shader_ids_) {
+    glAttachShader(id_, shader_id);
   }
 
-  glLinkProgram(m_ID);
+  glLinkProgram(id_);
 
   int32_t result;
-  glGetProgramiv(m_ID, GL_LINK_STATUS, &result);
+  glGetProgramiv(id_, GL_LINK_STATUS, &result);
 
   if (result == GL_FALSE) {
 
@@ -63,32 +63,34 @@ void ShaderProgram::create_program() {
               << std::flush;
 
     char msg[512];
-    glGetProgramInfoLog(m_ID, 512, nullptr, msg);
+    glGetProgramInfoLog(id_, 512, nullptr, msg);
 
     std::cout << msg << std::endl;
   }
 
-  for (const auto &shader_id : m_ShaderIDs) {
+  for (const auto &shader_id : shader_ids_) {
     glDeleteShader(shader_id);
   }
+
+  shader_ids_.clear();
 }
 
 void ShaderProgram::set_bool(const std::string &name, bool value) const {
-  glUniform1i(glGetUniformLocation(m_ID, name.c_str()), (int32_t) value);
+  glUniform1i(glGetUniformLocation(id_, name.c_str()), (int32_t) value);
 }
 
 void ShaderProgram::set_float(const std::string &name, float value) const {
-  glUniform1f(glGetUniformLocation(m_ID, name.c_str()), value);
+  glUniform1f(glGetUniformLocation(id_, name.c_str()), value);
 }
 
 void ShaderProgram::set_int(const std::string &name, int32_t value) const {
-  glUniform1i(glGetUniformLocation(m_ID, name.c_str()), value);
+  glUniform1i(glGetUniformLocation(id_, name.c_str()), value);
 }
 
 void ShaderProgram::set_mat4(const std::string &name, const float *values) const {
-  glUniformMatrix4fv(glGetUniformLocation(m_ID, name.c_str()), 1, GL_FALSE, values);
+  glUniformMatrix4fv(glGetUniformLocation(id_, name.c_str()), 1, GL_FALSE, values);
 }
 
 void ShaderProgram::use() const {
-  glUseProgram(m_ID);
+  glUseProgram(id_);
 }
