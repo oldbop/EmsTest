@@ -34,6 +34,7 @@ add_subdirectory(deps/slim/)
 
 set(SOURCES
   src/main.cpp
+  src/camera.cpp
   src/shader_program.cpp
   src/util/file_handling.cpp
 )

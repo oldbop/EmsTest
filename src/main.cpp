@@ -1,3 +1,4 @@
+#include "camera.hpp"
 #include "shader_program.hpp"
 
 #include "util/file_handling.hpp"
@@ -31,6 +32,7 @@
 struct Renderer {
   std::string title;
   uint32_t width, height;
+  Camera cam;
   GLFWwindow *win;
 };
 
