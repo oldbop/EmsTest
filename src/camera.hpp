@@ -8,9 +8,9 @@ public:
   mat4 get_transform() const;
 
 private:
-  vec3 tar_ = { 0.0f, 0.0f, 0.0f };
   vec3 pos_ = { 0.0f, 0.0f, 3.0f };
-  vec3 ori_ = { 0.0f, 1.0f, 0.0f };
+  vec3 tar_ = { 0.0f, 0.0f, 0.0f };
+  vec3 ort_ = { 0.0f, 1.0f, 0.0f };
 };
 
 

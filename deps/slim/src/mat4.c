@@ -15,6 +15,7 @@ mat4 mat4_tst(const vec3 *v);
 mat4 mat4_rotX(float r);
 mat4 mat4_rotY(float r);
 mat4 mat4_rotZ(float r);
+mat4 mat4_lookat(const vec3 *eye, const vec3 *center, const vec3 *up);
 
 #ifdef __cplusplus
 }

@@ -2,6 +2,7 @@
 #define SLIM_MAT4_H
 
 #include "types.h"
+#include "vec3.h"
 
 #include <math.h>
 #include <stdint.h>
@@ -150,6 +151,45 @@ inline mat4 mat4_rotZ(float r) {
 
   return res;
 }
+
+inline mat4 mat4_lookat(const vec3 *eye, const vec3 *center, const vec3 *up) {
+
+  vec3 d = vec3_sub(eye, center);
+  d      = vec3_nor(&d);
+
+  vec3 r = vec3_crs(up, &d);
+  r      = vec3_nor(&r);
+
+  vec3 u = vec3_crs(&d, &r);
+
+  mat4 rot = {
+      r.v[0],   r.v[1],   r.v[2],     0.0f,
+      u.v[0],   u.v[1],   u.v[2],     0.0f,
+      d.v[0],   d.v[1],   d.v[2],     0.0f,
+        0.0f,     0.0f,     0.0f,     1.0f
+  };
+
+  vec3 inv_pos = { -eye->v[0], -eye->v[1], -eye->v[2] };
+  mat4 tst     = mat4_tst(&inv_pos);
+
+  mat4 res = mat4_mul(&rot, &tst);
+
+  return res;
+
+  /*
+  mat4 res = {
+      r.v[0],   r.v[1],   r.v[2],   - (r.v[0] * eye.v[0]) - (r.v[1] * eye.v[1]) - (r.v[2] * eye.v[2]),
+      u.v[0],   u.v[1],   u.v[2],   - (u.v[0] * eye.v[0]) - (u.v[1] * eye.v[1]) - (u.v[2] * eye.v[2]),
+      d.v[0],   d.v[1],   d.v[2],   - (d.v[0] * eye.v[0]) - (d.v[1] * eye.v[1]) - (d.v[2] * eye.v[2]),
+        0.0f,     0.0f,     0.0f,     1.0f
+  };
+
+  return res;
+  */
+
+}
+
+
 
 #ifdef __cplusplus
 }
