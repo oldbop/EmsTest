@@ -45,25 +45,6 @@ void render(void *shader_program) {
   glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  /*
-  vec3 tstv  = { 0.5f * cosf(time * PI), 0.5f * sinf(time * PI), 0.0f };
-  mat4 tst   = mat4_tst(&tstv);
-
-  mat4 rotX  = mat4_rotX(time * PI * 0.25f);
-  mat4 rotY  = mat4_rotY(time * PI * 0.50f);
-  mat4 rotZ  = mat4_rotZ(PI / 4.0f);
-
-  mat4 rot   = mat4_mul(&rotX,  &rotY);
-  rot        = mat4_mul(&rot, &rotZ);
-
-  vec3 sclv  = { 0.2f, 0.2f, 0.2f };
-  mat4 scl   = mat4_scl(&sclv);
-
-  mat4 model = mat4_mul(&tst, &rot);
-  model      = mat4_mul(&model, &scl);
-  model      = mat4_tsp(&model);
-  */
-
   mat4 rotX  = mat4_rotX(time * PI * 0.25f);
   mat4 rotY  = mat4_rotY(time * PI * 0.50f);
   mat4 rotZ  = mat4_rotZ(PI / 4.0f);
@@ -77,10 +58,10 @@ void render(void *shader_program) {
   mat4 model = mat4_mul(&rot, &scl);
   model      = mat4_tsp(&model);
 
-  //mat4 view  = mat4_idy();
+  mat4 view  = mat4_idy();
 
-  mat4 view  = rdr.cam.get_transform();
-  view       = mat4_tsp(&view);
+  //mat4 view  = rdr.cam.get_transform();
+  //view       = mat4_tsp(&view);
 
   // Consider using std::static_cast<> instead of C style
   // Look into std::dynamic_cast<>
