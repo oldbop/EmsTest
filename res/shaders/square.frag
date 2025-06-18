@@ -2,7 +2,6 @@
 
 precision highp float;
 
-//in vec3 fCol;
 out vec4 rCol;
 
 void main() {

@@ -77,9 +77,15 @@ void render(void *shader_program) {
   mat4 model = mat4_mul(&rot, &scl);
   model      = mat4_tsp(&model);
 
+  //mat4 view  = mat4_idy();
+
+  mat4 view  = rdr.cam.get_transform();
+  view       = mat4_tsp(&view);
+
   // Consider using std::static_cast<> instead of C style
   // Look into std::dynamic_cast<>
-  ((ShaderProgram *) shader_program)->set_mat4("Rot", model.v);
+  ((ShaderProgram *) shader_program)->set_mat4("M", model.v);
+  ((ShaderProgram *) shader_program)->set_mat4("V", view.v);
 
   glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (void *) 0);
 
@@ -141,7 +147,6 @@ int main(int argc, char **argv) {
   glViewport(0, 0, rdr.width, rdr.height);
 
   float vertices[] = {
-    /*   Positions   */
     -0.5f, -0.5f,  0.5f,
     -0.5f,  0.5f,  0.5f,
      0.5f, -0.5f,  0.5f,
@@ -178,9 +183,6 @@ int main(int argc, char **argv) {
 
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *) 0);
   glEnableVertexAttribArray(0);
-
-  //glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *) (3 * sizeof(float)));
-  //glEnableVertexAttribArray(1);
 
   std::string vert = load_file("res/shaders/square.vert");
   std::string frag = load_file("res/shaders/square.frag");
