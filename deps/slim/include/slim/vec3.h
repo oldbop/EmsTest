@@ -12,7 +12,7 @@ extern "C" {
 #endif
 
 inline void vec3_print(const vec3 *v) {
-  printf("%.1f %.1f %.1f\n", v->v[0], v->v[1], v->v[2]);
+  printf("%.1f\n%.1f\n%.1f\n\n", v->v[0], v->v[1], v->v[2]);
 }
 
 inline vec3 vec3_nor(const vec3 *v) {
