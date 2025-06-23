@@ -63,8 +63,8 @@ endforeach()
 add_executable(${EXE_NAME} ${SOURCES})
 
 target_compile_options(${EXE_NAME} PRIVATE
-  $<$<COMPILE_LANG_AND_ID:C,Clang>:-std=c99;-Wall>
-  $<$<COMPILE_LANG_AND_ID:CXX,Clang>:-std=c++11;-Wall>
+  $<$<COMPILE_LANG_AND_ID:C,Clang>:-std=c99;-Wall;-pedantic-errors>
+  $<$<COMPILE_LANG_AND_ID:CXX,Clang>:-std=c++11;-Wall;-pedantic-errors>
 )
 
 if(EMSCRIPTEN)
