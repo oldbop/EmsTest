@@ -162,17 +162,18 @@ inline mat4 mat4_lookat(const vec3 *eye, const vec3 *center, const vec3 *up) {
 
   vec3 u = vec3_crs(&d, &r);
 
-  mat4 rot = {
+  vec3 inv_pos = { -eye->v[0], -eye->v[1], -eye->v[2] };
+
+  float tx = vec3_dot(&r, &inv_pos);
+  float ty = vec3_dot(&u, &inv_pos);
+  float tz = vec3_dot(&d, &inv_pos);
+
+  mat4 res = {
       r.v[0],   u.v[0],   d.v[0],     0.0f,
       r.v[1],   u.v[1],   d.v[1],     0.0f,
       r.v[2],   u.v[2],   d.v[2],     0.0f,
-        0.0f,     0.0f,     0.0f,     1.0f
+          tx,       ty,       tz,     1.0f
   };
-
-  vec3 inv_pos = { -eye->v[0], -eye->v[1], -eye->v[2] };
-  mat4 tst     = mat4_tst(&inv_pos);
-
-  mat4 res = mat4_mul(&rot, &tst);
 
   return res;
 }
