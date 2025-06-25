@@ -45,28 +45,16 @@ void render(void *shader_program) {
   glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  mat4 rotX  = mat4_rotX(time * PI * 0.25f);
-  mat4 rotY  = mat4_rotY(time * PI * 0.50f);
-  mat4 rotZ  = mat4_rotZ(PI / 4.0f);
-
-  mat4 rot   = mat4_mul(&rotX,  &rotY);
-  rot        = mat4_mul(&rot, &rotZ);
-
-  vec3 sclv  = { 0.5f, 0.5f, 0.5f };
-  mat4 scl   = mat4_scl(&sclv);
-
-  mat4 model = mat4_mul(&rot, &scl);
-  model      = mat4_tsp(&model);
-
-  mat4 view  = mat4_idy();
-
-  //mat4 view  = rdr.cam.get_transform();
-  //view       = mat4_tsp(&view);
+  //mat4 rotX  = mat4_rotX(time * PI * 0.25f);
+  mat4 rotY  = mat4_rotY(time * PI * 0.25f);
+  //mat4 rotZ  = mat4_rotZ(time * PI * 0.25f);
+  
+  mat4 camera = rdr.cam.get_transform(rdr.width, rdr.height);
 
   // Consider using std::static_cast<> instead of C style
   // Look into std::dynamic_cast<>
-  ((ShaderProgram *) shader_program)->set_mat4("M", model.v);
-  ((ShaderProgram *) shader_program)->set_mat4("V", view.v);
+  ((ShaderProgram *) shader_program)->set_mat4("M", rotY.v);
+  ((ShaderProgram *) shader_program)->set_mat4("PV", camera.v);
 
   glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (void *) 0);
 
@@ -124,7 +112,7 @@ int main(int argc, char **argv) {
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
   //glLineWidth(8.0f);
-  //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   glViewport(0, 0, rdr.width, rdr.height);
 
   float vertices[] = {
