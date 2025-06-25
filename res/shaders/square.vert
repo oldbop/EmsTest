@@ -3,8 +3,8 @@
 layout(location = 0) in vec3 aPos;
 
 uniform mat4 M;
-uniform mat4 V;
+uniform mat4 PV;
 
 void main() {
-  gl_Position = V * M * vec4(aPos, 1.0);
+  gl_Position = PV * M * vec4(aPos, 1.0);
 }
