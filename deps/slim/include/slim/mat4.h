@@ -178,7 +178,45 @@ inline mat4 mat4_lookat(const vec3 *eye, const vec3 *center, const vec3 *up) {
   return res;
 }
 
+inline mat4 mat4_persp_hor_fov(float fovx, float htow, float n, float f) {
 
+  float r = n * tanf(fovx / 2.0f);
+  float l = -r;
+  float t = htow * r;
+  float b = -t;
+
+  mat4 res = { 0 };
+
+  res.v[0]  =  (2 * n) / (r - l);
+  res.v[5]  =  (2 * n) / (t - b);
+  res.v[8]  =  (r + l) / (r - l);
+  res.v[9]  =  (t + b) / (t - b);
+  res.v[10] = -(f + n) / (f - n);
+  res.v[11] = -1.0f;
+  res.v[14] = -(2 * f * n) / (f - n);
+
+  return res;
+}
+
+inline mat4 mat4_persp_ver_fov(float fovy, float wtoh, float n, float f) {
+
+  float t = n * tanf(fovy / 2.0f);
+  float b = -t;
+  float r = wtoh * t;
+  float l = -r;
+
+  mat4 res = { 0 };
+
+  res.v[0]  =  (2 * n) / (r - l);
+  res.v[5]  =  (2 * n) / (t - b);
+  res.v[8]  =  (r + l) / (r - l);
+  res.v[9]  =  (t + b) / (t - b);
+  res.v[10] = -(f + n) / (f - n);
+  res.v[11] = -1.0f;
+  res.v[14] = -(2 * f * n) / (f - n);
+
+  return res;
+}
 
 #ifdef __cplusplus
 }

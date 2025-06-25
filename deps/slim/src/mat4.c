@@ -16,6 +16,8 @@ mat4 mat4_rotX(float r);
 mat4 mat4_rotY(float r);
 mat4 mat4_rotZ(float r);
 mat4 mat4_lookat(const vec3 *eye, const vec3 *center, const vec3 *up);
+mat4 mat4_persp_hor_fov(float fovx, float htow, float n, float f);
+mat4 mat4_persp_ver_fov(float fovy, float wtoh, float n, float f);
 
 #ifdef __cplusplus
 }
