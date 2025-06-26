@@ -15,8 +15,8 @@ private:
   vec3 ort_ = { 0.0f, 1.0f, 0.0f };
 
   float fovx_ = PI / 2.0f;
-  float n_    = 0.1f;
-  float f_    = 100.0f;
+  float near_ = 0.1f;
+  float far_  = 100.0f;
 };
 
 #endif
