@@ -69,6 +69,7 @@ void ShaderProgram::create_program() {
   }
 
   for (const auto &shader_id : shader_ids_) {
+    glDetachShader(id_, shader_id);
     glDeleteShader(shader_id);
   }
 
