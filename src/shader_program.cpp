@@ -14,7 +14,7 @@
 
 #endif
 
-void ShaderProgram::compile_shader(uint32_t type, const std::string &src) {
+void ShaderProgram::compile_shader(uint32_t type, const std::string& src) {
 
   const char *c_style = src.c_str();
   uint32_t shader_id  = glCreateShader(type);
@@ -47,7 +47,7 @@ void ShaderProgram::create_program() {
 
   id_ = glCreateProgram();
 
-  for (const auto &shader_id : shader_ids_) {
+  for (const auto& shader_id : shader_ids_) {
     glAttachShader(id_, shader_id);
   }
 
@@ -68,7 +68,7 @@ void ShaderProgram::create_program() {
     std::cout << msg << std::endl;
   }
 
-  for (const auto &shader_id : shader_ids_) {
+  for (const auto& shader_id : shader_ids_) {
     glDetachShader(id_, shader_id);
     glDeleteShader(shader_id);
   }
@@ -76,19 +76,19 @@ void ShaderProgram::create_program() {
   shader_ids_.clear();
 }
 
-void ShaderProgram::set_bool(const std::string &name, bool value) const {
+void ShaderProgram::set_bool(const std::string& name, bool value) const {
   glUniform1i(glGetUniformLocation(id_, name.c_str()), (int32_t) value);
 }
 
-void ShaderProgram::set_float(const std::string &name, float value) const {
+void ShaderProgram::set_float(const std::string& name, float value) const {
   glUniform1f(glGetUniformLocation(id_, name.c_str()), value);
 }
 
-void ShaderProgram::set_int(const std::string &name, int32_t value) const {
+void ShaderProgram::set_int(const std::string& name, int32_t value) const {
   glUniform1i(glGetUniformLocation(id_, name.c_str()), value);
 }
 
-void ShaderProgram::set_mat4(const std::string &name, const float *values) const {
+void ShaderProgram::set_mat4(const std::string& name, const float *values) const {
   glUniformMatrix4fv(glGetUniformLocation(id_, name.c_str()), 1, GL_FALSE, values);
 }
 
