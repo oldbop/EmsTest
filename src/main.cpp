@@ -147,29 +147,31 @@ int main(int argc, char **argv) {
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *) 0);
   glEnableVertexAttribArray(0);
 
-  std::string vert = load_file("res/shaders/square.vert");
-  std::string frag = load_file("res/shaders/square.frag");
+  {
+    std::string vert = load_file("res/shaders/square.vert");
+    std::string frag = load_file("res/shaders/square.frag");
 
-  if (vert.empty() || frag.empty()) {
-    std::cout << "Failed to load resources" << std::endl;
-    glfwTerminate();
-    return 1;
-  }
+    if (vert.empty() || frag.empty()) {
+      std::cout << "Failed to load resources" << std::endl;
+      glfwTerminate();
+      return 1;
+    }
 
-  ShaderProgram prog;
+    ShaderProgram prog;
 
-  prog.compile_shader(GL_VERTEX_SHADER, vert);
-  prog.compile_shader(GL_FRAGMENT_SHADER, frag);
-  prog.create_program();
-  prog.use();
+    prog.compile_shader(GL_VERTEX_SHADER, vert);
+    prog.compile_shader(GL_FRAGMENT_SHADER, frag);
+    prog.create_program();
+    prog.use();
 
 #ifdef EMSCRIPTEN
-  emscripten_set_main_loop_arg(render, &prog, 60, true);
+    emscripten_set_main_loop_arg(render, &prog, 60, true);
 #else
-  while (!glfwWindowShouldClose(rdr.win)) {
-    render(&prog);
-  }
+    while (!glfwWindowShouldClose(rdr.win)) {
+      render(&prog);
+    }
 #endif
+  }
 
   glfwTerminate();
   return 0;
