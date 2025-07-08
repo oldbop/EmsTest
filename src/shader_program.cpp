@@ -12,6 +12,28 @@
 
 #endif
 
+ShaderProgram::~ShaderProgram() {
+
+  for (const auto& shader_id : shader_ids_) {
+    glDeleteShader(shader_id);
+  }
+
+  glUseProgram(0);
+  glDeleteProgram(id_);
+}
+
+ShaderProgram::ShaderProgram(ShaderProgram&& other) noexcept : ShaderProgram() {
+  swap(other);
+}
+
+ShaderProgram& ShaderProgram::operator=(ShaderProgram&& other) noexcept {
+
+  ShaderProgram prog(std::move(other));
+  swap(prog);
+
+  return *this;
+}
+
 void ShaderProgram::compile_shader(uint32_t type, const std::string& src) {
 
   const char *c_style = src.c_str();
@@ -92,26 +114,4 @@ void ShaderProgram::set_mat4(const std::string& name, const float *values) const
 
 void ShaderProgram::use() const {
   glUseProgram(id_);
-}
-
-ShaderProgram::~ShaderProgram() {
-
-  for (const auto& shader_id : shader_ids_) {
-    glDeleteShader(shader_id);
-  }
-
-  glUseProgram(0);
-  glDeleteProgram(id_);
-}
-
-ShaderProgram::ShaderProgram(ShaderProgram&& other) noexcept : ShaderProgram() {
-  swap(other);
-}
-
-ShaderProgram& ShaderProgram::operator=(ShaderProgram&& other) noexcept {
-
-  ShaderProgram prog(std::move(other));
-  swap(prog);
-
-  return *this;
 }

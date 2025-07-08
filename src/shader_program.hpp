@@ -8,6 +8,13 @@
 
 class ShaderProgram {
 public:
+  ShaderProgram() = default;
+  ~ShaderProgram();
+  ShaderProgram(const ShaderProgram&) = delete;
+  ShaderProgram& operator=(const ShaderProgram&) = delete;
+  ShaderProgram(ShaderProgram&& other) noexcept;
+  ShaderProgram& operator=(ShaderProgram&& other) noexcept;
+
   void compile_shader(uint32_t type, const std::string& src);
   void create_program();
   uint32_t get_id() const { return id_; }
@@ -16,13 +23,6 @@ public:
   void set_int(const std::string& name, int32_t value) const;
   void set_mat4(const std::string& name, const float *values) const;
   void use() const;
-
-  ShaderProgram() = default;
-  ~ShaderProgram();
-  ShaderProgram(const ShaderProgram&) = delete;
-  ShaderProgram& operator=(const ShaderProgram&) = delete;
-  ShaderProgram(ShaderProgram&& other) noexcept;
-  ShaderProgram& operator=(ShaderProgram&& other) noexcept;
 private:
   uint32_t id_ = 0;
   std::vector<uint32_t> shader_ids_;
