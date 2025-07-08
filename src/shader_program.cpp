@@ -4,8 +4,6 @@
 #include <iostream>
 
 #ifdef SYS_GL_HEADERS
-#define GL_GLEXT_PROTOTYPES
-
 #include <GL/gl.h>
 #include <GL/glext.h>
 

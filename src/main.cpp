@@ -10,12 +10,9 @@
 
 #include <slim/slim.h>
 
-#define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
 #ifdef SYS_GL_HEADERS
-#define GL_GLEXT_PROTOTYPES
-
 #include <GL/gl.h>
 #include <GL/glext.h>
 

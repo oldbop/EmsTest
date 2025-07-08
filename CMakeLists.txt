@@ -67,6 +67,11 @@ target_compile_options(${EXE_NAME} PRIVATE
   $<$<COMPILE_LANG_AND_ID:CXX,Clang>:-std=c++11;-Wall;-pedantic-errors>
 )
 
+target_compile_definitions(${EXE_NAME}
+  PRIVATE GLFW_INCLUDE_NONE
+  PRIVATE GL_GLEXT_PROTOTYPES
+)
+
 if(EMSCRIPTEN)
   execute_process(COMMAND emcc --cflags
     OUTPUT_VARIABLE EM_CFLAGS
