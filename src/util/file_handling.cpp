@@ -5,21 +5,19 @@
 
 std::string load_file(const char *path) {
 
-  FILE *file = fopen(path, "rb");
+  std::FILE *file = std::fopen(path, "rb");
 
   if (!file) {
     return std::string();
   }
 
   std::string data;
+  std::fseek(file, 0, SEEK_END);
+  data.resize(std::ftell(file));
 
-  fseek(file, 0, SEEK_END);
-  data.resize(ftell(file));
-  fseek(file, 0, SEEK_SET);
-
-  fread(&(data[0]), 1, data.size(), file);
-
-  fclose(file);
+  std::fseek(file, 0, SEEK_SET);
+  std::fread(&(data[0]), 1, data.size(), file);
+  std::fclose(file);
 
   return data;
 }
