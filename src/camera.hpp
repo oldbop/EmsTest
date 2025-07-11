@@ -1,13 +1,13 @@
 #ifndef CAMERA_HPP
 #define CAMERA_HPP
 
-#include <slim/slim.h>
+#include "integers.hpp"
 
-#include <cstdint>
+#include <slim/slim.h>
 
 class Camera {
 public:
-  mat4 get_transform(uint32_t screen_width, uint32_t screen_height) const;
+  mat4 get_transform(uint32 screen_width, uint32 screen_height) const;
 
 private:
   vec3 pos_ = { 0.0f, 0.0f, 2.0f };

@@ -1,7 +1,8 @@
 #ifndef SHADER_PROGRAM_HPP
 #define SHADER_PROGRAM_HPP
 
-#include <cstdint>
+#include "integers.hpp"
+
 #include <string>
 #include <utility>
 #include <vector>
@@ -15,17 +16,17 @@ public:
   ShaderProgram(ShaderProgram&& other) noexcept;
   ShaderProgram& operator=(ShaderProgram&& other) noexcept;
 
-  void compile_shader(uint32_t type, const std::string& src);
+  void compile_shader(uint32 type, const std::string& src);
   void create_program();
-  uint32_t get_id() const { return id_; }
+  uint32 get_id() const { return id_; }
   void set_bool(const std::string& name, bool value) const;
   void set_float(const std::string& name, float value) const;
-  void set_int(const std::string& name, int32_t value) const;
+  void set_int(const std::string& name, int32 value) const;
   void set_mat4(const std::string& name, const float *values) const;
   void use() const;
 private:
-  uint32_t id_ = 0;
-  std::vector<uint32_t> shader_ids_;
+  uint32 id_ = 0;
+  std::vector<uint32> shader_ids_;
 
   void swap(ShaderProgram& other) noexcept {
     std::swap(id_, other.id_);

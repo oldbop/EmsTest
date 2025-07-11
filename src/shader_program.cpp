@@ -1,7 +1,6 @@
 #include "shader_program.hpp"
 
-#include <cstdint>
-#include <iostream>
+#include "integers.hpp"
 
 #ifdef SYS_GL_HEADERS
 #include <GL/gl.h>
@@ -11,6 +10,9 @@
 #include <glad/gl.h>
 
 #endif
+
+#include <iostream>
+#include <string>
 
 ShaderProgram::~ShaderProgram() {
 
@@ -34,15 +36,15 @@ ShaderProgram& ShaderProgram::operator=(ShaderProgram&& other) noexcept {
   return *this;
 }
 
-void ShaderProgram::compile_shader(uint32_t type, const std::string& src) {
+void ShaderProgram::compile_shader(uint32 type, const std::string& src) {
 
   const char *c_style = src.c_str();
-  uint32_t shader_id  = glCreateShader(type);
+  uint32 shader_id  = glCreateShader(type);
 
   glShaderSource(shader_id, 1, &c_style, nullptr);
   glCompileShader(shader_id);
 
-  int32_t result;
+  int32 result;
   glGetShaderiv(shader_id, GL_COMPILE_STATUS, &result);
 
   if (result == GL_FALSE) {
@@ -73,7 +75,7 @@ void ShaderProgram::create_program() {
 
   glLinkProgram(id_);
 
-  int32_t result;
+  int32 result;
   glGetProgramiv(id_, GL_LINK_STATUS, &result);
 
   if (result == GL_FALSE) {
@@ -97,14 +99,14 @@ void ShaderProgram::create_program() {
 }
 
 void ShaderProgram::set_bool(const std::string& name, bool value) const {
-  glUniform1i(glGetUniformLocation(id_, name.c_str()), (int32_t) value);
+  glUniform1i(glGetUniformLocation(id_, name.c_str()), (int32) value);
 }
 
 void ShaderProgram::set_float(const std::string& name, float value) const {
   glUniform1f(glGetUniformLocation(id_, name.c_str()), value);
 }
 
-void ShaderProgram::set_int(const std::string& name, int32_t value) const {
+void ShaderProgram::set_int(const std::string& name, int32 value) const {
   glUniform1i(glGetUniformLocation(id_, name.c_str()), value);
 }
 

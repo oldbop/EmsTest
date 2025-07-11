@@ -1,16 +1,8 @@
 #include "camera.hpp"
+#include "integers.hpp"
 #include "shader_program.hpp"
 
 #include "util/file_handling.hpp"
-
-#include <cmath>
-#include <cstdint>
-#include <iostream>
-#include <string>
-
-#include <slim/slim.h>
-
-#include <GLFW/glfw3.h>
 
 #ifdef SYS_GL_HEADERS
 #include <GL/gl.h>
@@ -26,9 +18,17 @@
 
 #endif
 
+#include <GLFW/glfw3.h>
+
+#include <slim/slim.h>
+
+#include <cmath>
+#include <iostream>
+#include <string>
+
 struct Renderer {
   std::string title;
-  uint32_t width, height;
+  uint32 width, height;
   Camera cam;
   GLFWwindow *win;
 };
@@ -80,7 +80,7 @@ int main(int argc, char **argv) {
   gladLoadGL(glfwGetProcAddress);
 #endif
 
-  auto resize_cb = [](GLFWwindow *win, int32_t width, int32_t height) -> void {
+  auto resize_cb = [](GLFWwindow *win, int32 width, int32 height) -> void {
     
     glViewport(0, 0, width, height);
     
@@ -88,7 +88,7 @@ int main(int argc, char **argv) {
     rdr.height = height;
   };
 
-  auto key_cb = [](GLFWwindow *win, int32_t key, int32_t scan, int32_t act, int32_t mods) -> void {
+  auto key_cb = [](GLFWwindow *win, int32 key, int32 scan, int32 act, int32 mods) -> void {
 
     if (key == GLFW_KEY_ESCAPE && act == GLFW_PRESS) {
       glfwSetWindowShouldClose(win, 1);
@@ -118,7 +118,7 @@ int main(int argc, char **argv) {
      0.5f,  0.5f, -0.5f
   };
 
-  uint32_t indices[] = {
+  uint32 indices[] = {
     0, 2, 3, 3, 1, 0,
     4, 0, 1, 1, 5, 4,
     6, 4, 5, 5, 7, 6,
@@ -127,16 +127,16 @@ int main(int argc, char **argv) {
     4, 6, 2, 2, 0, 4
   };
 
-  uint32_t vao;
+  uint32 vao;
   glGenVertexArrays(1, &vao);
   glBindVertexArray(vao);
 
-  uint32_t vbo;
+  uint32 vbo;
   glGenBuffers(1, &vbo);
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-  uint32_t ebo;
+  uint32 ebo;
   glGenBuffers(1, &ebo);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);

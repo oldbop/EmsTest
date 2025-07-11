@@ -1,8 +1,10 @@
 #include "camera.hpp"
 
+#include "integers.hpp"
+
 #include <slim/slim.h>
 
-mat4 Camera::get_transform(uint32_t screen_width, uint32_t screen_height) const {
+mat4 Camera::get_transform(uint32 screen_width, uint32 screen_height) const {
 
   float htow = (float) screen_height / (float) screen_width;
 
