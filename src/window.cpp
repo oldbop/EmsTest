@@ -13,11 +13,10 @@
 
 #include <GLFW/glfw3.h>
 
-#include <stdexcept>
+#include <iostream>
 #include <string>
 
-Window::Window(int32 width, int32 height, const std::string& title)
-  : ptr_(nullptr, nullptr) {
+bool Window::init(int32 width, int32 height, const std::string& title) {
 
   //glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   //glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -27,7 +26,7 @@ Window::Window(int32 width, int32 height, const std::string& title)
 
   if (!win) {
     glfwTerminate();
-    throw std::runtime_error("GLFW: failed to create window");
+    return false;
   }
 
   ptr_ = { win, glfwDestroyWindow };
@@ -39,12 +38,16 @@ Window::Window(int32 width, int32 height, const std::string& title)
   gladLoadGL(glfwGetProcAddress);
 #endif
 
-  Size<int32> size = get_size();
+  int32 fb_width, fb_height;
+
+  glfwGetFramebufferSize(ptr_.get(), &fb_width, &fb_height);
 
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-  glViewport(0, 0, size.width, size.height);
+  glViewport(0, 0, fb_width, fb_height);
+
+  cam_.set_aspect(static_cast<float>(fb_width) / static_cast<float>(fb_height));
 
   glfwSetWindowUserPointer(ptr_.get(), this);
 
@@ -59,21 +62,20 @@ Window::Window(int32 width, int32 height, const std::string& title)
   glfwSetFramebufferSizeCallback(ptr_.get(), resize_cb);
   glfwSetKeyCallback(ptr_.get(), key_cb);
 
-
-
+  return true;
 }
 
-Size<int32> Window::get_size() const {
-
-  Size<int32> size;
-  glfwGetFramebufferSize(ptr_.get(), &size.width, &size.height);
-  
-  return size;
+void Window::resize_cb(GLFWwindow *win, int32 width, int32 height) {
+  glViewport(0, 0, width, height);
+  cam_.set_aspect(static_cast<float>(width) / static_cast<float>(height));
 }
 
-std::string Window::get_title() const {
+void Window::key_cb(GLFWwindow *win, int32 key, int32 scan, int32 act, int32 mods) {
 
-  std::string title = glfwGetWindowTitle(ptr_.get());
-  
-  return title;
+  if (key == GLFW_KEY_ESCAPE && act == GLFW_PRESS) {
+    glfwSetWindowShouldClose(win, 1);
+  }
+  if (key == GLFW_KEY_SPACE && act == GLFW_PRESS) {
+    std::cout << "Space pressed!!" << std::endl;
+  }
 }
