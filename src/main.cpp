@@ -1,6 +1,7 @@
 #include "camera.hpp"
 #include "integers.hpp"
 #include "shader_program.hpp"
+#include "window.hpp"
 
 #include "util/file_handling.hpp"
 
@@ -24,152 +25,20 @@
 
 #include <cmath>
 #include <iostream>
+#include <optional>
 #include <string>
-
-struct Renderer {
-  std::string title;
-  uint32 width, height;
-  Camera cam;
-  GLFWwindow *win;
-};
-
-Renderer rdr = { "Rotating square", 700, 700 };
-
-void render(void *shader_program) {
-
-  float time = glfwGetTime();
-
-  glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-  mat4 model  = mat4_rotY(time * PI * 0.25f);
-  mat4 camera = rdr.cam.get_transform(rdr.width, rdr.height);
-
-  static_cast<ShaderProgram *>(shader_program)->set_mat4("M", model.v);
-  static_cast<ShaderProgram *>(shader_program)->set_mat4("PV", camera.v);
-
-  glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (void *) 0);
-
-  glfwSwapBuffers(rdr.win);
-  glfwPollEvents();
-}
 
 int main(int argc, char **argv) {
 
-  if (!glfwInit()) {
-    std::cout << "GLFW: failed to initialise" << std::endl;
-    return 1;
-  }
+  std::optional<Window> opt = Window::create(700, 700, "Rotating cube");
 
-  //glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-  //glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-  //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+  if (!opt.has_value())
+    return -1;
 
-  rdr.win = glfwCreateWindow(rdr.width, rdr.height, rdr.title.c_str(), nullptr, nullptr);
+  Window window(std::move(*opt));
 
-  if (!rdr.win) {
-    std::cout << "GLFW: failed to create window" << std::endl;
-    glfwTerminate();
-    return 1;
-  }
+  while (!window.should_close())
+    window.draw();
 
-  glfwMakeContextCurrent(rdr.win);
-  glfwSwapInterval(1);
-
-#ifndef SYS_GL_HEADERS
-  gladLoadGL(glfwGetProcAddress);
-#endif
-
-  auto resize_cb = [](GLFWwindow *win, int32 width, int32 height) -> void {
-    
-    glViewport(0, 0, width, height);
-    
-    rdr.width  = width;
-    rdr.height = height;
-  };
-
-  auto key_cb = [](GLFWwindow *win, int32 key, int32 scan, int32 act, int32 mods) -> void {
-
-    if (key == GLFW_KEY_ESCAPE && act == GLFW_PRESS) {
-      glfwSetWindowShouldClose(win, 1);
-    }
-    if (key == GLFW_KEY_SPACE && act == GLFW_PRESS) {
-      std::cout << "Space pressed!!" << std::endl;
-    }
-  };
-
-  glfwSetFramebufferSizeCallback(rdr.win, resize_cb);
-  glfwSetKeyCallback(rdr.win, key_cb);
-
-  glEnable(GL_DEPTH_TEST);
-  glEnable(GL_CULL_FACE);
-  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-  glViewport(0, 0, rdr.width, rdr.height);
-
-  float vertices[] = {
-    -0.5f, -0.5f,  0.5f,
-    -0.5f,  0.5f,  0.5f,
-     0.5f, -0.5f,  0.5f,
-     0.5f,  0.5f,  0.5f,
-
-    -0.5f, -0.5f, -0.5f,
-    -0.5f,  0.5f, -0.5f,
-     0.5f, -0.5f, -0.5f,
-     0.5f,  0.5f, -0.5f
-  };
-
-  uint32 indices[] = {
-    0, 2, 3, 3, 1, 0,
-    4, 0, 1, 1, 5, 4,
-    6, 4, 5, 5, 7, 6,
-    2, 6, 7, 7, 3, 2,
-    1, 3, 7, 7, 5, 1,
-    4, 6, 2, 2, 0, 4
-  };
-
-  uint32 vao;
-  glGenVertexArrays(1, &vao);
-  glBindVertexArray(vao);
-
-  uint32 vbo;
-  glGenBuffers(1, &vbo);
-  glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-  uint32 ebo;
-  glGenBuffers(1, &ebo);
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *) 0);
-  glEnableVertexAttribArray(0);
-
-  {
-    std::string vert = load_file("res/shaders/square.vert");
-    std::string frag = load_file("res/shaders/square.frag");
-
-    if (vert.empty() || frag.empty()) {
-      std::cout << "Failed to load resources" << std::endl;
-      glfwTerminate();
-      return 1;
-    }
-
-    ShaderProgram prog;
-
-    prog.compile_shader(GL_VERTEX_SHADER, vert);
-    prog.compile_shader(GL_FRAGMENT_SHADER, frag);
-    prog.create_program();
-    prog.use();
-
-#ifdef EMSCRIPTEN
-    emscripten_set_main_loop_arg(render, &prog, 60, true);
-#else
-    while (!glfwWindowShouldClose(rdr.win)) {
-      render(&prog);
-    }
-#endif
-  }
-
-  glfwTerminate();
   return 0;
 }
