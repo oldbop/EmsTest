@@ -7,9 +7,8 @@ std::string load_file(const char *path) {
 
   std::FILE *file = std::fopen(path, "rb");
 
-  if (!file) {
+  if (!file)
     return std::string();
-  }
 
   std::string data;
   std::fseek(file, 0, SEEK_END);
