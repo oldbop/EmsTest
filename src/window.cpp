@@ -71,7 +71,7 @@ std::optional<Window> Window::create(int32 width, int32 height, const std::strin
 
   window.cam_.set_aspect(static_cast<float>(fb_width) / static_cast<float>(fb_height));
 
-  return Window(std::move(window));
+  return std::optional<Window>(std::move(window));
 }
 
 void Window::draw() {
