@@ -8,7 +8,6 @@
 
 #include <optional>
 #include <string>
-#include <utility>
 
 class Window {
 public:
@@ -32,11 +31,6 @@ private:
   GLFWwindow *ptr_ = nullptr;
 
   Window() = default;
-
-  void swap(Window& other) noexcept {
-    std::swap(cam_, other.cam_);
-    std::swap(ptr_, other.ptr_);
-  }
 };
 
 #endif

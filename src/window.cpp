@@ -16,14 +16,17 @@
 #include <iostream>
 #include <optional>
 #include <string>
+#include <utility>
 
 Window::~Window() {
   if (ptr_)
     glfwTerminate();
 }
 
-Window::Window(Window&& other) noexcept : Window() {
-  swap(other);
+Window::Window(Window&& other) noexcept
+  : cam_(std::move(other.cam_))
+  , ptr_(std::exchange(other.ptr_, nullptr)) {
+
   register_callbacks();
 }
 
@@ -96,7 +99,6 @@ void Window::register_callbacks() {
 }
 
 void Window::resize_callback(GLFWwindow *p, int32 width, int32 height) {
-
   glViewport(0, 0, width, height);
   cam_.set_aspect(static_cast<float>(width) / static_cast<float>(height));
 }
