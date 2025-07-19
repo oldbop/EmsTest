@@ -36,6 +36,7 @@ int main(int argc, char **argv) {
     return -1;
 
   Window window(std::move(*opt));
+  opt.reset();
 
   while (!window.should_close())
     window.draw();
