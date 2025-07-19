@@ -19,8 +19,8 @@ public:
 
   static std::optional<Window> create(int32 width, int32 height, const std::string& title);
 
-  bool should_close() { return glfwWindowShouldClose(ptr_); }
-  void draw();
+  bool should_close() const { return glfwWindowShouldClose(ptr_); }
+  void run();
 private:
   void register_callbacks();
 

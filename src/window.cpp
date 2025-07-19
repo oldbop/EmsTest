@@ -74,7 +74,7 @@ std::optional<Window> Window::create(int32 width, int32 height, const std::strin
   return std::optional<Window>(std::move(window));
 }
 
-void Window::draw() {
+void Window::run() {
 
   glClear(GL_COLOR_BUFFER_BIT);
   

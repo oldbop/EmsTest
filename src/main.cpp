@@ -39,7 +39,7 @@ int main(int argc, char **argv) {
   opt.reset();
 
   while (!window.should_close())
-    window.draw();
+    window.run();
 
   return 0;
 }
