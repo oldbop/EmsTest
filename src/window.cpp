@@ -104,7 +104,6 @@ void Window::resize_callback(GLFWwindow *p, int32 width, int32 height) {
 }
 
 void Window::key_callback(GLFWwindow *p, int32 key, int32 scan, int32 act, int32 mods) {
-
   if (key == GLFW_KEY_ESCAPE && act == GLFW_PRESS)
     glfwSetWindowShouldClose(p, 1);
   if (key == GLFW_KEY_SPACE && act == GLFW_PRESS)
