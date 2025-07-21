@@ -54,7 +54,7 @@ std::optional<Window> Window::create(int32 width, int32 height, const std::strin
   window.ptr_ = window_ptr;
 
   glfwMakeContextCurrent(window.ptr_);
-  glfwSwapInterval(1);
+  glfwSwapInterval(0);
 
 #ifndef SYS_GL_HEADERS
   gladLoadGL(glfwGetProcAddress);
