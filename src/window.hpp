@@ -1,8 +1,8 @@
 #ifndef WINDOW_HPP
 #define WINDOW_HPP
 
-#include "camera.hpp"
 #include "integers.hpp"
+#include "renderer.hpp"
 
 #include <GLFW/glfw3.h>
 
@@ -27,8 +27,8 @@ private:
   void resize_callback(GLFWwindow *p, int32 width, int32 height);
   void key_callback(GLFWwindow *p, int32 key, int32 scan, int32 act, int32 mods);
 
-  Camera cam_;
   GLFWwindow *ptr_ = nullptr;
+  Renderer rdr_;
 
   Window() = default;
 };

@@ -36,6 +36,7 @@ set(SOURCES
   src/camera.cpp
   src/main.cpp
   src/mesh.cpp
+  src/renderer.cpp
   src/shader_program.cpp
   src/util/file_handling.cpp
   src/window.cpp

@@ -24,8 +24,19 @@ Window::~Window() {
 }
 
 Window::Window(Window&& other) noexcept
-  : cam_(std::move(other.cam_))
-  , ptr_(std::exchange(other.ptr_, nullptr)) {
+  : ptr_(std::exchange(other.ptr_, nullptr))
+  , rdr_(std::move(other.rdr_)) {
+
+  int32 fb_width, fb_height;
+
+  glfwGetFramebufferSize(ptr_, &fb_width, &fb_height);
+
+  glEnable(GL_DEPTH_TEST);
+  glEnable(GL_CULL_FACE);
+  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  glViewport(0, 0, fb_width, fb_height);
+
+  rdr_.cam_.htow = static_cast<float>(fb_height) / static_cast<float>(fb_width);
 
   register_callbacks();
 }
@@ -49,35 +60,23 @@ std::optional<Window> Window::create(int32 width, int32 height, const std::strin
     return std::nullopt;
   }
 
-  Window window;
-
-  window.ptr_ = window_ptr;
-
-  glfwMakeContextCurrent(window.ptr_);
+  glfwMakeContextCurrent(window_ptr);
   glfwSwapInterval(0);
 
 #ifndef SYS_GL_HEADERS
   gladLoadGL(glfwGetProcAddress);
 #endif
 
-  int32 fb_width, fb_height;
-
-  glfwGetFramebufferSize(window.ptr_, &fb_width, &fb_height);
-
-  glEnable(GL_DEPTH_TEST);
-  glEnable(GL_CULL_FACE);
-  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-  glViewport(0, 0, fb_width, fb_height);
-
-  window.cam_.htow = static_cast<float>(fb_height) / static_cast<float>(fb_width);
+  Window window;
+  window.ptr_ = window_ptr;
 
   return std::optional<Window>(std::move(window));
 }
 
 void Window::run() {
 
-  glClear(GL_COLOR_BUFFER_BIT);
-  
+  rdr_.render(glfwGetTime());
+
   glfwSwapBuffers(ptr_);
   glfwPollEvents();
 }
@@ -100,7 +99,7 @@ void Window::register_callbacks() {
 
 void Window::resize_callback(GLFWwindow *p, int32 width, int32 height) {
   glViewport(0, 0, width, height);
-  cam_.htow = static_cast<float>(height) / static_cast<float>(width);
+  rdr_.cam_.htow = static_cast<float>(height) / static_cast<float>(width);
 }
 
 void Window::key_callback(GLFWwindow *p, int32 key, int32 scan, int32 act, int32 mods) {
