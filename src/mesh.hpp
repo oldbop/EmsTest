@@ -45,9 +45,9 @@ public:
   void bind() const { glBindVertexArray(vao_); }
   void unbind() const { glBindVertexArray(0); }
 private:
-  uint32 vao_;
-  uint32 vbo_;
-  uint32 ebo_;
+  uint32 vao_ = 0;
+  uint32 vbo_ = 0;
+  uint32 ebo_ = 0;
 };
 
 #endif
