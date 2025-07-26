@@ -11,7 +11,7 @@ struct Camera {
   vec3 tar = { 0.0f, 0.0f, 0.0f };
   vec3 ort = { 0.0f, 1.0f, 0.0f };
 
-  float fovx = PI / 2.0f;
+  float fovx = PI / 3.0f;
   float htow = 1.0f;
   float near = 0.1f;
   float far  = 100.0f;
