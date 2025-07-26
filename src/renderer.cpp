@@ -1,7 +1,5 @@
 #include "renderer.hpp"
 
-#include "util/file_handling.hpp"
-
 #ifdef SYS_GL_HEADERS
 #include <GL/gl.h>
 #include <GL/glext.h>
@@ -12,18 +10,16 @@
 #endif
 
 #include <string>
+#include <utility>
 
-Renderer::Renderer()
-  : cam_({})
-  , mesh_({})
-  , prog_({}) {
+Renderer::Renderer(Mesh mesh, ShaderProgram prog, Camera cam)
+  : mesh_(std::move(mesh))
+  , prog_(std::move(prog))
+  , cam_(cam) {
 
-  std::string vert = load_file("res/shaders/square.vert");
-  std::string frag = load_file("res/shaders/square.frag");
-
-  prog_.compile_shader(GL_VERTEX_SHADER, vert);
-  prog_.compile_shader(GL_FRAGMENT_SHADER, frag);
-  prog_.create_program();
+  glEnable(GL_DEPTH_TEST);
+  glEnable(GL_CULL_FACE);
+  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 }
 
 void Renderer::render(float time) {

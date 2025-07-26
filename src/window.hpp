@@ -2,7 +2,6 @@
 #define WINDOW_HPP
 
 #include "integers.hpp"
-#include "renderer.hpp"
 
 #include <GLFW/glfw3.h>
 
@@ -20,15 +19,16 @@ public:
   static std::optional<Window> create(int32 width, int32 height, const std::string& title);
 
   bool should_close() const { return glfwWindowShouldClose(ptr_); }
-  void run();
+  float time() const { return glfwGetTime(); }
+
+  void swap_buffers() { glfwSwapBuffers(ptr_); }
+  void poll_events() { glfwPollEvents(); }
 private:
   void register_callbacks();
 
-  void resize_callback(GLFWwindow *p, int32 width, int32 height);
   void key_callback(GLFWwindow *p, int32 key, int32 scan, int32 act, int32 mods);
 
   GLFWwindow *ptr_ = nullptr;
-  Renderer rdr_;
 
   Window() = default;
 };

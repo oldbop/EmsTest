@@ -10,12 +10,12 @@ class Window;
 class Renderer {
   friend class Window;
 public:
-  Renderer();
+  Renderer(Mesh mesh, ShaderProgram prog, Camera cam);
   void render(float time);
 private:
-  Camera cam_;
   Mesh mesh_;
   ShaderProgram prog_;
+  Camera cam_;
 };
 
 #endif
