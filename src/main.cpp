@@ -1,5 +1,4 @@
 #include "camera.hpp"
-#include "integers.hpp"
 #include "mesh.hpp"
 #include "renderer.hpp"
 #include "shader_program.hpp"
@@ -25,25 +24,33 @@ int main(int argc, char **argv) {
   Window window(std::move(*opt));
   opt.reset();
 
-  std::string vert = load_file("res/shaders/square.vert");
-  std::string frag = load_file("res/shaders/square.frag");
+  Mesh mesh;
 
   ShaderProgram prog;
+
+  std::string vert = load_file("res/shaders/square.vert");
+  std::string frag = load_file("res/shaders/square.frag");
 
   prog.compile_shader(GL_VERTEX_SHADER, vert);
   prog.compile_shader(GL_FRAGMENT_SHADER, frag);
   prog.create_program();
 
-  Mesh mesh;
-  Camera cam;
+  Camera cam = {
+    { 0.0f, 0.0f, 4.0f },
+    { 0.0f, 0.0f, 0.0f },
+    { 0.0f, 1.0f, 0.0f },
+    PI / 3.0f,
+    0.1f,
+    100.0f
+  };
 
-  Renderer rdr(window, std::move(mesh), std::move(prog), cam);
+  Renderer rdr(std::move(mesh), std::move(prog), cam);
 
   while (!window.should_close()) {
 
     float time = window.time();
 
-    rdr.render(time);
+    rdr.render(time, window.width(), window.height());
 
     window.swap_buffers();
     window.poll_events();

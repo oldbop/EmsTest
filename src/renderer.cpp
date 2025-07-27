@@ -1,6 +1,9 @@
 #include "renderer.hpp"
 
-#include "window.hpp"
+#include "camera.hpp"
+#include "integers.hpp"
+#include "mesh.hpp"
+#include "shader_program.hpp"
 
 #ifdef SYS_GL_HEADERS
 #include <GL/gl.h>
@@ -14,7 +17,7 @@
 #include <string>
 #include <utility>
 
-Renderer::Renderer(const Window& win, Mesh mesh, ShaderProgram prog, Camera cam)
+Renderer::Renderer(Mesh mesh, ShaderProgram prog, Camera cam)
   : mesh_(std::move(mesh))
   , prog_(std::move(prog))
   , cam_(cam) {
@@ -22,10 +25,9 @@ Renderer::Renderer(const Window& win, Mesh mesh, ShaderProgram prog, Camera cam)
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-  glViewport(0, 0, win.size().width, win.size().height);
 }
 
-void Renderer::render(float time) {
+void Renderer::render(float time, int32 width, int32 height) {
 
   glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -34,7 +36,7 @@ void Renderer::render(float time) {
   prog_.use();
 
   mat4 model  = mat4_rotY(time * PI * 0.25f);
-  mat4 camera = cam_.get_transform();
+  mat4 camera = cam_.get_transform(width, height);
 
   prog_.set_mat4("M", model.v);
   prog_.set_mat4("PV", camera.v);
