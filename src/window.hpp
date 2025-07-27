@@ -8,6 +8,11 @@
 #include <optional>
 #include <string>
 
+struct Size {
+  int32 width;
+  int32 height;
+};
+
 class Window {
 public:
   ~Window();
@@ -20,6 +25,7 @@ public:
 
   bool should_close() const { return glfwWindowShouldClose(ptr_); }
   float time() const { return glfwGetTime(); }
+  Size size() const;
 
   void swap_buffers() { glfwSwapBuffers(ptr_); }
   void poll_events() { glfwPollEvents(); }

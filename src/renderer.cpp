@@ -1,5 +1,7 @@
 #include "renderer.hpp"
 
+#include "window.hpp"
+
 #ifdef SYS_GL_HEADERS
 #include <GL/gl.h>
 #include <GL/glext.h>
@@ -12,7 +14,7 @@
 #include <string>
 #include <utility>
 
-Renderer::Renderer(Mesh mesh, ShaderProgram prog, Camera cam)
+Renderer::Renderer(const Window& win, Mesh mesh, ShaderProgram prog, Camera cam)
   : mesh_(std::move(mesh))
   , prog_(std::move(prog))
   , cam_(cam) {
@@ -20,6 +22,7 @@ Renderer::Renderer(Mesh mesh, ShaderProgram prog, Camera cam)
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  glViewport(0, 0, win.size().width, win.size().height);
 }
 
 void Renderer::render(float time) {

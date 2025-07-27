@@ -55,15 +55,18 @@ std::optional<Window> Window::create(int32 width, int32 height, const std::strin
   gladLoadGL(glfwGetProcAddress);
 #endif
 
-  int32 fb_width, fb_height;
-  glfwGetFramebufferSize(window_ptr, &fb_width, &fb_height);
-
-  glViewport(0, 0, fb_width, fb_height);
-
   Window window;
   window.ptr_ = window_ptr;
 
   return std::optional<Window>(std::move(window));
+}
+
+Size Window::size() const {
+
+  Size fb_size;
+  glfwGetFramebufferSize(ptr_, &fb_size.width, &fb_size.height);
+  
+  return fb_size;
 }
 
 void Window::register_callbacks() {

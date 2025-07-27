@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
   Mesh mesh;
   Camera cam;
 
-  Renderer rdr(std::move(mesh), std::move(prog), cam);
+  Renderer rdr(window, std::move(mesh), std::move(prog), cam);
 
   while (!window.should_close()) {
 

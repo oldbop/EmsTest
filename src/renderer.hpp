@@ -4,13 +4,11 @@
 #include "camera.hpp"
 #include "mesh.hpp"
 #include "shader_program.hpp"
-
-class Window;
+#include "window.hpp"
 
 class Renderer {
-  friend class Window;
 public:
-  Renderer(Mesh mesh, ShaderProgram prog, Camera cam);
+  Renderer(const Window& win, Mesh mesh, ShaderProgram prog, Camera cam);
   void render(float time);
 private:
   Mesh mesh_;
