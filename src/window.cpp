@@ -24,7 +24,10 @@ Window::~Window() {
 }
 
 Window::Window(Window&& other) noexcept
-  : ptr_(std::exchange(other.ptr_, nullptr)) {
+  : ptr_   (std::exchange(other.ptr_, nullptr))
+  , width_ (std::exchange(other.width_, 0))
+  , height_(std::exchange(other.height_, 0))
+  , title_ (std::move(other.title_)) {
 
   register_callbacks();
 }
@@ -55,34 +58,49 @@ std::optional<Window> Window::create(int32 width, int32 height, const std::strin
   gladLoadGL(glfwGetProcAddress);
 #endif
 
+  int32 fb_width, fb_height;
+  glfwGetFramebufferSize(window_ptr, &fb_width, &fb_height);
+
+  glViewport(0, 0, fb_width, fb_height);
+
   Window window;
-  window.ptr_ = window_ptr;
+
+  window.ptr_    = window_ptr;
+  window.width_  = fb_width;
+  window.height_ = fb_height;
+  window.title_  = title;
 
   return std::optional<Window>(std::move(window));
-}
-
-Size Window::size() const {
-
-  Size fb_size;
-  glfwGetFramebufferSize(ptr_, &fb_size.width, &fb_size.height);
-  
-  return fb_size;
 }
 
 void Window::register_callbacks() {
 
   glfwSetWindowUserPointer(ptr_, this);
 
-  auto key_la = [](GLFWwindow *p, int32 key, int32 scan, int32 act, int32 mods) -> void {
+  auto key = [](GLFWwindow *p, int32 key, int32 scan, int32 act, int32 mods) -> void {
     static_cast<Window *>(glfwGetWindowUserPointer(p))->key_callback(p, key, scan, act, mods);
   };
 
-  glfwSetKeyCallback(ptr_, key_la);
+  auto resize = [](GLFWwindow *p, int32 width, int32 height) -> void {
+    static_cast<Window *>(glfwGetWindowUserPointer(p))->resize_callback(p, width, height);
+  };
+
+  glfwSetKeyCallback(ptr_, key);
+  glfwSetFramebufferSizeCallback(ptr_, resize);
 }
 
 void Window::key_callback(GLFWwindow *p, int32 key, int32 scan, int32 act, int32 mods) {
+
   if (key == GLFW_KEY_ESCAPE && act == GLFW_PRESS)
     glfwSetWindowShouldClose(p, 1);
   if (key == GLFW_KEY_SPACE && act == GLFW_PRESS)
     std::cout << "Space pressed!!" << std::endl;
+}
+
+void Window::resize_callback(GLFWwindow *p, int32 width, int32 height) {
+
+  glViewport(0, 0, width, height);
+
+  width_  = width;
+  height_ = height;
 }
