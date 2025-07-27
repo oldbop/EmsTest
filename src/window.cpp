@@ -23,12 +23,8 @@ Window::~Window() {
     glfwTerminate();
 }
 
-Window::Window(Window&& other) noexcept
-  : ptr_   (std::exchange(other.ptr_, nullptr))
-  , width_ (std::exchange(other.width_, 0))
-  , height_(std::exchange(other.height_, 0))
-  , title_ (std::move(other.title_)) {
-
+Window::Window(Window&& other) noexcept : Window() {
+  swap(other);
   register_callbacks();
 }
 
@@ -68,7 +64,6 @@ std::optional<Window> Window::create(int32 width, int32 height, const std::strin
   window.ptr_    = window_ptr;
   window.width_  = fb_width;
   window.height_ = fb_height;
-  window.title_  = title;
 
   return std::optional<Window>(std::move(window));
 }
