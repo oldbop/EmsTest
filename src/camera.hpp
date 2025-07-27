@@ -1,20 +1,21 @@
 #ifndef CAMERA_HPP
 #define CAMERA_HPP
 
+#include "integers.hpp"
+
 #include <slim/slim.h>
 
 struct Camera {
 
-  mat4 get_transform() const;
+  mat4 get_transform(int32 width, int32 height) const;
 
-  vec3 pos = { 0.0f, 0.0f, 2.0f };
-  vec3 tar = { 0.0f, 0.0f, 0.0f };
-  vec3 ort = { 0.0f, 1.0f, 0.0f };
+  vec3 pos;
+  vec3 tar;
+  vec3 ort;
 
-  float fovx = PI / 3.0f;
-  float htow = 1.0f;
-  float near = 0.1f;
-  float far  = 100.0f;
+  float fovx;
+  float near;
+  float far;
 };
 
 #endif
