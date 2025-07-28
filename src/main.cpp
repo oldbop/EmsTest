@@ -14,6 +14,23 @@
 #include <optional>
 #include <string>
 
+struct Context {
+  Window&   window;
+  Renderer& rdr;
+};
+
+void loop(void *ptr) {
+
+  Context ctx = *static_cast<Context *>(ptr);
+
+  float time = ctx.window.time();
+
+  ctx.rdr.render(time, ctx.window.width(), ctx.window.height());
+
+  ctx.window.swap_buffers();
+  ctx.window.poll_events();
+}
+
 int main(int argc, char **argv) {
 
   std::optional<Window> opt = Window::create(700, 700, "Rotating cube");
@@ -46,15 +63,14 @@ int main(int argc, char **argv) {
 
   Renderer rdr(std::move(mesh), std::move(prog), cam);
 
-  while (!window.should_close()) {
+  Context ctx = { window, rdr };
 
-    float time = window.time();
-
-    rdr.render(time, window.width(), window.height());
-
-    window.swap_buffers();
-    window.poll_events();
-  }
+#ifdef EMSCRIPTEN
+  emscripten_set_main_loop_arg(loop, &ctx, 0, true);
+#else
+  while (!window.should_close())
+    loop(&ctx);
+#endif
 
   return 0;
 }
