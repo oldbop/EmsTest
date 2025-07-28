@@ -24,7 +24,7 @@ Renderer::Renderer(Mesh mesh, ShaderProgram prog, Camera cam)
 
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
-  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 }
 
 void Renderer::render(float time, int32 width, int32 height) {
