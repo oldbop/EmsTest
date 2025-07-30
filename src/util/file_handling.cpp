@@ -1,14 +1,17 @@
 #include "file_handling.hpp"
 
 #include <cstdio>
+#include <iostream>
 #include <string>
 
 std::string load_file(const char *path) {
 
   std::FILE *file = std::fopen(path, "rb");
 
-  if (!file)
+  if (!file) {
+    std::cout << "Failed to load file: " << path << std::endl;
     return std::string();
+  }
 
   std::string data;
   std::fseek(file, 0, SEEK_END);
