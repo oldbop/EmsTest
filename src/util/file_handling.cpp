@@ -4,9 +4,9 @@
 #include <iostream>
 #include <string>
 
-std::string load_file(const char *path) {
+std::string load_file(const std::string& path) {
 
-  std::FILE *file = std::fopen(path, "rb");
+  std::FILE *file = std::fopen(path.c_str(), "rb");
 
   if (!file) {
     std::cout << "Failed to load file: " << path << std::endl;
