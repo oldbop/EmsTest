@@ -1,6 +1,5 @@
-#include "window.hpp"
-
 #include "integers.hpp"
+#include "window.hpp"
 
 #ifdef SYS_GL_HEADERS
 #include <GL/gl.h>

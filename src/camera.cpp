@@ -1,5 +1,4 @@
 #include "camera.hpp"
-
 #include "integers.hpp"
 
 #include <slim/slim.h>

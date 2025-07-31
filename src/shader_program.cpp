@@ -1,6 +1,5 @@
-#include "shader_program.hpp"
-
 #include "integers.hpp"
+#include "shader_program.hpp"
 
 #ifdef SYS_GL_HEADERS
 #include <GL/gl.h>

@@ -1,8 +1,7 @@
-#include "renderer.hpp"
-
 #include "camera.hpp"
 #include "integers.hpp"
 #include "mesh.hpp"
+#include "renderer.hpp"
 #include "shader_program.hpp"
 
 #ifdef SYS_GL_HEADERS
@@ -20,7 +19,7 @@
 Renderer::Renderer(Mesh mesh, ShaderProgram prog, Camera cam)
   : mesh_(std::move(mesh))
   , prog_(std::move(prog))
-  , cam_(cam) {
+  , cam_ (cam) {
 
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
